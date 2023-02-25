@@ -1,0 +1,238 @@
+class World
+    instance variables
+
+    operations
+
+        -- Using update
+        -- Approksimating
+        public Scenario1 : () ==> bool
+        Scenario1() == (
+            MySystem`arm.SetTarget(1);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(7);
+            return true;
+        );
+
+        -- Using update
+        public Scenario2 : () ==> bool
+        Scenario2() == (
+            MySystem`arm.SetTarget(1);
+            MySystem`arm.SetVelocity(1/7);
+            MySystem`arm.Step(7);
+            return true;
+        );
+
+        -- Using update
+        -- Approaching
+        public Scenario3 : () ==> bool
+        Scenario3() == (
+            MySystem`arm.SetTarget(1);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(0.5);
+            return true;
+        );
+
+        public Scenario4 : () ==> bool
+        Scenario4() == (
+            MySystem`arm.SetTarget(1);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            MySystem`arm.UpdateVelocity();
+            MySystem`arm.Step(30);
+            return true;
+        );
+    
+        
+end World
