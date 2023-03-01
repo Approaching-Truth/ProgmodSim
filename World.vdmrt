@@ -35,6 +35,10 @@ class World
             MySystem`arm.SetTarget(1);
             MySystem`arm.SetVelocity(1/7);
             MySystem`arm.Step(7);
+            MySystem`arm.SetVelocity(0);
+            MySystem`arm.Step(7);
+            MySystem`arm.Step(7);
+            MySystem`arm.Step(7);
             return true;
         );
 
