@@ -8,10 +8,10 @@ instance variables
     
     
 values
-    target_lb : real = 3.14/2 - 0.1; -- M1
-    target_ub : real = 3.14/2; -- M2
-    safe_lb : real = -90;
-    safe_ub : real = 90;
+    target_lb : real = 3.14/2 - 0.1; -- N1
+    target_ub : real = 3.14/2; -- N2
+    safe_lb : real = 0; -- 0pi = 0deg
+    safe_ub : real = 3.14/2; --1/2 pi = 90deg
     
 operations
     public Robot_Arm: () ==> Robot_Arm
@@ -61,7 +61,8 @@ operations
         joint_angle := [next_joint_angle] ^ joint_angle;
         time_steps := [hd time_steps + delta] ^ time_steps;
         angular_velocity := [current_angular_velocity] ^ angular_velocity;
-    ) post hd joint_angle >= safe_lb and hd joint_angle <= safe_ub;
+    ) 
+    post hd joint_angle >= safe_lb and hd joint_angle <= safe_ub;
 
 
 end Robot_Arm

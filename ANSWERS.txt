@@ -1,3 +1,0 @@
-Pre conditions: ?
-Post conditions: Joint angle must not be greater than the upper bound of the safe joint angle range 
-                 and not less than lower bound of the safe joint angle range
