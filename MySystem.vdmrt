@@ -1,5 +1,5 @@
 system MySystem
--- s
+-- THIS SHOULD BE UPDATED IN VER2 ONLY!
 instance variables
     public static arm:Robot_Arm := new Robot_Arm();
 
