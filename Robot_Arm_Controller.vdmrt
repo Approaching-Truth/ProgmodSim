@@ -1,0 +1,38 @@
+class Robot_Arm_Controller
+    instance variables
+        public target: real;
+        public ctl_joint_angle: real;
+        public ctl_angular_velocity: real;
+    operations
+        -- Constructor
+        public Robot_Arm_Controller: () ==> Robot_Arm_Controller
+        Robot_Arm_Controller() == (
+            target := 0;
+            ctl_joint_angle := 0;
+            ctl_angular_velocity := 0;
+        );
+        public setTarget: (real) ==> ()
+        setTarget(angle) == duration (0) (
+            target := angle;
+        );
+        
+        public setVelocity: (real) ==> ()
+        setVelocity(velocity) == duration (0) (
+            ctl_angular_velocity := velocity;
+            MySystem`arm.env_angular_velocity := velocity;
+        );
+
+        public updateVelocity: () ==> ()
+        updateVelocity() == duration (0) (
+            dcl angle_error : real := target - ctl_joint_angle;
+            dcl new_velocity : real := angle_error * 0.2;
+            ctl_angular_velocity := new_velocity;
+            MySystem`arm.env_angular_velocity := new_velocity;
+        );
+
+        public monitor_joint_angle: () ==> ()
+        monitor_joint_angle() == duration(0) (
+            dcl env_angle: real := MySystem`arm.env_joint_angle;
+            ctl_joint_angle := env_angle;
+        );
+end Robot_Arm_Controller

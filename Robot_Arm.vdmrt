@@ -1,10 +1,9 @@
 class Robot_Arm
 
 instance variables
-    time_step : real; -- time
-    public joint_angle : real; -- radians, current angle of arm
-    public angular_velocity : real;
-    joint_angle_target : real;
+    public time_step : real; -- time
+    public env_joint_angle : real; -- radians, current angle of arm
+    public env_angular_velocity : real;
     
     
 values
@@ -17,33 +16,17 @@ operations
     public Robot_Arm: () ==> Robot_Arm
     Robot_Arm () == (
         time_step := 0;
-        joint_angle := 0;
-        angular_velocity := 0;
-        joint_angle_target := 0;
+        env_joint_angle := 0;
+        env_angular_velocity := 0;
     );
 
-    public SetTarget: (real) ==> ()
-    SetTarget(angle) == duration (0) (
-        joint_angle_target := angle;
-    );
-    
-    public SetVelocity: (real) ==> ()
-    SetVelocity(velocity) == duration (0) (
-        angular_velocity := velocity;
-    );
 
-    public UpdateVelocity: () ==> ()
-    UpdateVelocity() == duration (0) (
-        dcl angle_error : real := joint_angle_target - joint_angle;
-        angular_velocity := angle_error * 0.2;
-    );
-
-    public Step: (real) ==> ()
-    Step(delta) == duration(0) (
+    public step: (real) ==> ()
+    step(delta) == duration(0) (
         
         -- FETCH VALUES
-        dcl current_joint_angle : real := joint_angle;
-        dcl current_angular_velocity : real := angular_velocity;
+        dcl current_joint_angle : real := env_joint_angle;
+        dcl current_angular_velocity : real := env_angular_velocity;
 
         -- COMPUTE NEW VALUES
         dcl delta_joint_angle : real := current_angular_velocity * delta;
@@ -53,13 +36,16 @@ operations
         -- We assume that the arm will simply stop when it reaches the boundaries
         if(next_joint_angle >= safe_ub) then (next_joint_angle := safe_ub; current_angular_velocity := 0);
         if(next_joint_angle <= safe_lb) then (next_joint_angle := safe_lb; current_angular_velocity := 0);
-    
+
         -- SET NEW VALUES --
-        joint_angle := next_joint_angle;
+        env_joint_angle := next_joint_angle;
+        MySystem`controller.ctl_joint_angle := next_joint_angle;
+        env_angular_velocity := current_angular_velocity;
+        MySystem`controller.ctl_angular_velocity := current_angular_velocity;
+
         time_step := time_step + delta;
-        angular_velocity := current_angular_velocity;
     ) 
-    post joint_angle >= safe_lb and joint_angle <= safe_ub;
+    post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
 
 
 end Robot_Arm
