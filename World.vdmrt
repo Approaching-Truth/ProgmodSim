@@ -1,7 +1,21 @@
 class World
     instance variables
+        io : IO := new IO ();
 
     operations
+        public echoState: (nat) ==> ()
+        echoState(counter) == (
+            dcl succ : bool; -- used to determine the success of the print operation
+            dcl str : seq of char := "";
+            -- Instruction count
+            str := str ^ VDMUtil`val2seq_of_char[nat](counter);
+            -- Angular velocity
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.joint_angle);
+            -- Joint angle
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.angular_velocity);
+
+            succ := io.echo(str);
+        );
 
         -- Using update
         -- Approksimating

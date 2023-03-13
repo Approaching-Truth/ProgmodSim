@@ -1,9 +1,9 @@
 class Robot_Arm
 
 instance variables
-    time_steps : seq of real; -- time
-    public joint_angle : seq of real; -- radians, current angle of arm
-    public angular_velocity : seq of real;
+    time_step : real; -- time
+    public joint_angle : real; -- radians, current angle of arm
+    public angular_velocity : real;
     joint_angle_target : real;
     
     
@@ -16,9 +16,10 @@ values
 operations
     public Robot_Arm: () ==> Robot_Arm
     Robot_Arm () == (
-        time_steps := [0];
-        joint_angle := [0];
-        angular_velocity := [0];
+        time_step := 0;
+        joint_angle := 0;
+        angular_velocity := 0;
+        joint_angle_target := 0;
     );
 
     public SetTarget: (real) ==> ()
@@ -28,25 +29,21 @@ operations
     
     public SetVelocity: (real) ==> ()
     SetVelocity(velocity) == duration (0) (
-        time_steps := [hd time_steps] ^ time_steps;
-        joint_angle := [hd joint_angle] ^ joint_angle;
-        angular_velocity := [velocity] ^ angular_velocity;
+        angular_velocity := velocity;
     );
 
     public UpdateVelocity: () ==> ()
     UpdateVelocity() == duration (0) (
-        dcl angle_error : real := joint_angle_target - (hd joint_angle);
-        time_steps := [hd time_steps] ^ time_steps;
-        joint_angle := [hd joint_angle] ^ joint_angle;
-        angular_velocity := [angle_error * 0.2] ^ angular_velocity;
+        dcl angle_error : real := joint_angle_target - joint_angle;
+        angular_velocity := angle_error * 0.2;
     );
 
     public Step: (real) ==> ()
     Step(delta) == duration(0) (
         
         -- FETCH VALUES
-        dcl current_joint_angle : real := hd joint_angle;
-        dcl current_angular_velocity : real := hd angular_velocity;
+        dcl current_joint_angle : real := joint_angle;
+        dcl current_angular_velocity : real := angular_velocity;
 
         -- COMPUTE NEW VALUES
         dcl delta_joint_angle : real := current_angular_velocity * delta;
@@ -58,11 +55,11 @@ operations
         if(next_joint_angle <= safe_lb) then (next_joint_angle := safe_lb; current_angular_velocity := 0);
     
         -- SET NEW VALUES --
-        joint_angle := [next_joint_angle] ^ joint_angle;
-        time_steps := [hd time_steps + delta] ^ time_steps;
-        angular_velocity := [current_angular_velocity] ^ angular_velocity;
+        joint_angle := next_joint_angle;
+        time_step := time_step + delta;
+        angular_velocity := current_angular_velocity;
     ) 
-    post hd joint_angle >= safe_lb and hd joint_angle <= safe_ub;
+    post joint_angle >= safe_lb and joint_angle <= safe_ub;
 
 
 end Robot_Arm
