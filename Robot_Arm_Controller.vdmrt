@@ -27,7 +27,6 @@ class Robot_Arm_Controller
             dcl angle_error : real := target - ctl_joint_angle;
             dcl new_velocity : real := angle_error * 0.2;
             ctl_angular_velocity := new_velocity;
-            MySystem`arm.env_angular_velocity := new_velocity;
         );
 
         public monitor_joint_angle: () ==> ()
@@ -35,4 +34,6 @@ class Robot_Arm_Controller
             dcl env_angle: real := MySystem`arm.env_joint_angle;
             ctl_joint_angle := env_angle;
         );
+
+
 end Robot_Arm_Controller

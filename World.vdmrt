@@ -8,15 +8,15 @@ class World
             dcl succ : bool; -- used to determine the success of the print operation
             dcl str : seq of char := "";
             -- Instruction count
-            str := str ^ VDMUtil`val2seq_of_char[nat](counter) ^ " - ";
+            str := "Count: " ^ str ^ VDMUtil`val2seq_of_char[nat](counter) ^ "- Time Step: ";
             -- Time step
-            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.time_step) ^ " - ";
+            str :=  str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.time_step) ^ " - env_vel: ";
             -- Angular velocity Environment
-            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_joint_angle) ^ " - ";
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_angular_velocity) ^ " -joint angle env: ";
             -- Joint angle Environment
-            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_angular_velocity) ^ " - ";
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_joint_angle) ^ " - angular vel ctl: ";
             -- Angular velocity Controller
-            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`controller.ctl_joint_angle) ^ " - ";
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`controller.ctl_joint_angle) ^ " - joint angle ctl: ";
             -- Joint angle Controller
             str := str ^ VDMUtil`val2seq_of_char[real](MySystem`controller.ctl_angular_velocity);
             
@@ -156,6 +156,26 @@ class World
             echoState(15);
             return true;
         );
+
+        public Scenario5 : () ==> bool
+        Scenario5() == (
+            echoState(0);
+            MySystem`controller.setTarget(3.1415/8);
+            echoState(1);
+            MySystem`controller.updateVelocity();
+            echoState(2);
+            MySystem`arm.step(2);
+            echoState(3);
+            MySystem`controller.monitor_joint_angle();
+            echoState(4);
+            MySystem`controller.updateVelocity();
+            echoState(5);
+            MySystem`arm.step(2);
+            echoState(6);
+            MySystem`controller.monitor_joint_angle();
+            echoState(7);
+            return true;
+        )
     
         
 end World

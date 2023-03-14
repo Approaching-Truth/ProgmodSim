@@ -23,15 +23,28 @@ operations
 
     public step: (real) ==> ()
     step(delta) == duration(0) (
+        -- Declare variables
+        -- Fetch values 
+        dcl current_joint_angle : real;
+        dcl current_angular_velocity : real;
+
+        -- Compute New Values 
+        dcl delta_joint_angle : real;
+        dcl next_joint_angle : real;
+
+        -- UPDATE environment angular velocity
+        env_angular_velocity := MySystem`controller.ctl_angular_velocity;
+
+         -- Fetch Values
+        current_joint_angle := env_joint_angle;
+        current_angular_velocity := env_angular_velocity;
         
-        -- FETCH VALUES
-        dcl current_joint_angle : real := env_joint_angle;
-        dcl current_angular_velocity : real := env_angular_velocity;
 
         -- COMPUTE NEW VALUES
-        dcl delta_joint_angle : real := current_angular_velocity * delta;
-        dcl next_joint_angle : real := current_joint_angle + delta_joint_angle;
+        delta_joint_angle := current_angular_velocity * delta;
+        next_joint_angle := current_joint_angle + delta_joint_angle;
 
+        
         -- boundary --
         -- We assume that the arm will simply stop when it reaches the boundaries
         if(next_joint_angle >= safe_ub) then (next_joint_angle := safe_ub; current_angular_velocity := 0);
@@ -39,9 +52,7 @@ operations
 
         -- SET NEW VALUES --
         env_joint_angle := next_joint_angle;
-        MySystem`controller.ctl_joint_angle := next_joint_angle;
         env_angular_velocity := current_angular_velocity;
-        MySystem`controller.ctl_angular_velocity := current_angular_velocity;
 
         time_step := time_step + delta;
     ) 
