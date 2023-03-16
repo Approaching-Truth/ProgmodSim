@@ -12,6 +12,7 @@ class Robot_Arm_Controller
             target := 0;
             ctl_joint_angle := 0;
             ctl_angular_velocity := 0;
+            acceptance_range := 0.1
         );
         public set_target: (real) ==> ()
         set_target(angle) == duration (0) (
