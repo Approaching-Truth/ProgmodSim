@@ -3,6 +3,8 @@ class Robot_Arm_Controller
         public target: real;
         public ctl_joint_angle: real;
         public ctl_angular_velocity: real;
+        public acceptance_range: real;
+
     operations
         -- Constructor
         public Robot_Arm_Controller: () ==> Robot_Arm_Controller
@@ -11,19 +13,19 @@ class Robot_Arm_Controller
             ctl_joint_angle := 0;
             ctl_angular_velocity := 0;
         );
-        public setTarget: (real) ==> ()
-        setTarget(angle) == duration (0) (
+        public set_target: (real) ==> ()
+        set_target(angle) == duration (0) (
             target := angle;
         );
         
-        public setVelocity: (real) ==> ()
-        setVelocity(velocity) == duration (0) (
+        public set_velocity: (real) ==> ()
+        set_velocity(velocity) == duration (0) (
             ctl_angular_velocity := velocity;
             MySystem`arm.env_angular_velocity := velocity;
         );
 
-        public updateVelocity: () ==> ()
-        updateVelocity() == duration (0) (
+        public update_velocity: () ==> ()
+        update_velocity() == duration (0) (
             dcl angle_error : real := target - ctl_joint_angle;
             dcl new_velocity : real := angle_error * 0.2;
             ctl_angular_velocity := new_velocity;

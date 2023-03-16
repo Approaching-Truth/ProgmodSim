@@ -8,15 +8,15 @@ class World
             dcl succ : bool; -- used to determine the success of the print operation
             dcl str : seq of char := "";
             -- Instruction count
-            str := "Count: " ^ str ^ VDMUtil`val2seq_of_char[nat](counter) ^ "- Time Step: ";
+            str := "Instruction: " ^ str ^ VDMUtil`val2seq_of_char[nat](counter) ^ "- time_step: ";
             -- Time step
-            str :=  str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.time_step) ^ " - env_vel: ";
+            str :=  str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.time_step) ^ " - env_ang_vel: ";
             -- Angular velocity Environment
-            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_angular_velocity) ^ " -joint angle env: ";
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_angular_velocity) ^ " - env_joint_angle: ";
             -- Joint angle Environment
-            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_joint_angle) ^ " - angular vel ctl: ";
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`arm.env_joint_angle) ^ " - ctl_joint_angle: ";
             -- Angular velocity Controller
-            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`controller.ctl_joint_angle) ^ " - joint angle ctl: ";
+            str := str ^ VDMUtil`val2seq_of_char[real](MySystem`controller.ctl_joint_angle) ^ " - ctl_ang_vel: ";
             -- Joint angle Controller
             str := str ^ VDMUtil`val2seq_of_char[real](MySystem`controller.ctl_angular_velocity);
             
@@ -29,33 +29,33 @@ class World
         public Scenario1 : () ==> bool
         Scenario1() == (
             echoState(0);
-            MySystem`controller.setTarget(1);
+            MySystem`controller.set_target(1);
             echoState(1);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(2);
             MySystem`arm.step(7);
             echoState(3);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(4);
             MySystem`arm.step(7);
             echoState(5);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(6);
             MySystem`arm.step(7);
             echoState(7);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(8);
             MySystem`arm.step(7);
             echoState(9);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(10);
             MySystem`arm.step(7);
             echoState(11);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(12);
             MySystem`arm.step(7);
             echoState(13);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(14);
             MySystem`arm.step(7);
             echoState(15);
@@ -66,13 +66,13 @@ class World
         public Scenario2 : () ==> bool
         Scenario2() == (
             echoState(0);
-            MySystem`controller.setTarget(1);
+            MySystem`controller.set_target(1);
             echoState(1);
-            MySystem`controller.setVelocity(1/7);
+            MySystem`controller.set_velocity(1/7);
             echoState(2);
             MySystem`arm.step(7);
             echoState(3);
-            MySystem`controller.setVelocity(0);
+            MySystem`controller.set_velocity(0);
             echoState(4);
             MySystem`arm.step(7);
             echoState(5);
@@ -88,33 +88,33 @@ class World
         public Scenario3 : () ==> bool
         Scenario3() == (
             echoState(0);
-            MySystem`controller.setTarget(1);
+            MySystem`controller.set_target(1);
             echoState(1);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(2);
             MySystem`arm.step(0.5);
             echoState(3);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(4);
             MySystem`arm.step(0.5);
             echoState(5);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(6);
             MySystem`arm.step(0.5);
             echoState(7);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(8);
             MySystem`arm.step(0.5);
             echoState(9);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(10);
             MySystem`arm.step(0.5);
             echoState(11);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(12);
             MySystem`arm.step(0.5);
             echoState(13);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(14);
             MySystem`arm.step(0.5);
             echoState(15);
@@ -124,33 +124,33 @@ class World
         public Scenario4 : () ==> bool
         Scenario4() == (
             echoState(0);
-            MySystem`controller.setTarget(1);
+            MySystem`controller.set_target(1);
             echoState(1);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(2);
             MySystem`arm.step(30);
             echoState(3);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(4);
             MySystem`arm.step(30);
             echoState(5);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(6);
             MySystem`arm.step(30);
             echoState(7);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(8);
             MySystem`arm.step(30);
             echoState(9);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(10);
             MySystem`arm.step(30);
             echoState(11);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(12);
             MySystem`arm.step(30);
             echoState(13);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(14);
             MySystem`arm.step(30);
             echoState(15);
@@ -160,15 +160,15 @@ class World
         public Scenario5 : () ==> bool
         Scenario5() == (
             echoState(0);
-            MySystem`controller.setTarget(3.1415/8);
+            MySystem`controller.set_target(3.1415/8);
             echoState(1);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(2);
             MySystem`arm.step(2);
             echoState(3);
             MySystem`controller.monitor_joint_angle();
             echoState(4);
-            MySystem`controller.updateVelocity();
+            MySystem`controller.update_velocity();
             echoState(5);
             MySystem`arm.step(2);
             echoState(6);
