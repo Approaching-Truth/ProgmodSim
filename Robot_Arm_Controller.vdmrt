@@ -12,7 +12,7 @@ class Robot_Arm_Controller
             target := 0;
             ctl_joint_angle := 0;
             ctl_angular_velocity := 0;
-            acceptance_range := 0.1
+            acceptance_range := 0.01;
         );
         public set_target: (real) ==> ()
         set_target(angle) == duration (0) (
@@ -34,7 +34,7 @@ class Robot_Arm_Controller
             angle_error := target - ctl_joint_angle;
             
             -- In accepted range
-            if ((angle_error > acceptance_range/2) and (angle_error < -acceptance_range/2)) then (
+            if ((angle_error < acceptance_range/2) and (angle_error > -acceptance_range/2)) then (
                 new_velocity := 0;
             ) 
             -- Not in accepted range

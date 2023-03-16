@@ -159,21 +159,24 @@ class World
 
         public Scenario5 : () ==> bool
         Scenario5() == (
+            dcl i : int;
+            dcl j : int;
+
             echoState(0);
             MySystem`controller.set_target(3.1415/8);
             echoState(1);
-            MySystem`controller.update_velocity();
-            echoState(2);
-            MySystem`arm.step(2);
-            echoState(3);
-            MySystem`controller.monitor_joint_angle();
-            echoState(4);
-            MySystem`controller.update_velocity();
-            echoState(5);
-            MySystem`arm.step(2);
-            echoState(6);
-            MySystem`controller.monitor_joint_angle();
-            echoState(7);
+            j := 2;
+
+            for i = 2 to 10 do (
+                MySystem`controller.update_velocity();
+                echoState(j);
+                MySystem`arm.step(7);
+                echoState(j+1);
+                MySystem`controller.monitor_joint_angle();
+                echoState(j+2);
+                j := j + 3;
+            );
+            
             return true;
         )
     
