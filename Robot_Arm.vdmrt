@@ -1,10 +1,10 @@
 class Robot_Arm
 
 instance variables
-    public time_step : real; -- time
+    public time_step : real; 
     public env_joint_angle : real; -- radians, current angle of arm
     public env_angular_velocity : real;
-    
+    public data_history : seq of (real * real * real * real);
     
 values
     target_lb : real = 3.14/2 - 0.1; -- N1
@@ -18,6 +18,12 @@ operations
         time_step := 0;
         env_joint_angle := 0;
         env_angular_velocity := 0;
+        data_history := [];
+    );
+
+    public record_state: () ==> ()
+    record_state () == (
+        data_history := data_history ^ [mk_(time, time_step, env_joint_angle, env_angular_velocity)];
     );
 
 
@@ -58,5 +64,11 @@ operations
     ) 
     post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
 
+    -- Getter method, returns env_joint_angle
+    public get_env_joint_angle: () ==> (real)
+    get_env_joint_angle() == duration(0) (
+        return env_joint_angle;
+    )
+    
 
 end Robot_Arm
