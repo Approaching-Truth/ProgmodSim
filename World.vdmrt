@@ -1,14 +1,97 @@
 class World
     instance variables
         io : IO := new IO ();
+        csv : CSV := new CSV ();
 
     operations
 
-        public Scenario1 : () ==> bool
-        Scenario1() == (
-            skip;
+        public format_data_out: seq of (real * real * real) * seq of (real * real * real) ==> seq of char
+        format_data_out(sh1, sh2) == (
+            -- String to be manipulated
+            dcl out_string : seq of char := "";
+            
+            -- STATE HISTORY 1
+            -- First att
+            for tup in sh1 do (
+                dcl val: real := tup.#1;
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+            );
+
+            out_string := out_string ^ "/";
+
+            -- Second att
+            for tup in sh1 do (
+                dcl val : real := tup.#2;
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+            );
+
+            out_string := out_string ^ "/";
+
+            -- Third att
+            for tup in sh1 do (
+                dcl val : real := tup.#3;
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+            );
+
+            out_string := out_string ^ "|";
+
+            -- STATE HISTORY 2
+            -- First att
+            for tup in sh2 do (
+                dcl val: real := tup.#1;
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+            );
+            out_string := out_string ^ "/";
+
+            -- Second att
+            for tup in sh2 do (
+                dcl val : real := tup.#2;
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+            );
+            out_string := out_string ^ "/";
+
+            -- Third att
+            for tup in sh2 do (
+                dcl val : real := tup.#3;
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+            );
+            out_string := out_string ^ "/";
+
+            return out_string;
+        );
+
+        public scenario_1: () ==> bool
+        scenario_1() == (
+            dcl succ : bool;
+            dcl str : seq of char;
+
+            MySystem`controller.set_target(3.1415/8);
+            MySystem`controller.monitor_joint_angle();
+            MySystem`controller.update_velocity();
+            MySystem`arm.step(7);
+
+            MySystem`controller.monitor_joint_angle();
+            MySystem`controller.update_velocity();
+            MySystem`arm.step(7);
+
+            MySystem`controller.monitor_joint_angle();
+            MySystem`controller.update_velocity();
+            MySystem`arm.step(7);
+
+            MySystem`controller.monitor_joint_angle();
+            MySystem`controller.update_velocity();
+            MySystem`arm.step(7);
+
+            -- Log results
+            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
+            succ := io.fecho("C:\\Users\\buste\\Desktop\\TEXTFILE", str, <append>);
+            
             return true;
-        )
+        );
+
+
+
+        
     
         
 end World
