@@ -24,7 +24,6 @@ def txt_to_variable_array (data, sh_index, var_index):
     for i, e in enumerate(seperated):
         if (e == ""):
             index_to_remove.append(i)
-    
     for e in reversed(index_to_remove):
         seperated.pop(e)
 
