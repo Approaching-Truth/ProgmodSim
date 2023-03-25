@@ -43,7 +43,20 @@ x_end = max(x)
 res = 100 # resolution
 x_target = np.linspace(x_start, x_end, res)
 y_target = np.full(100, ref)
-plt.plot(x_target, y_target, color="black")
+plt.plot(x_target, y_target, color="black", label="Target")
+
+# Safe ranges
+N1 = 0
+N2 = 3.1415/4
+x_start = 0
+x_end = max(x)
+res = 100 # resolution
+y_N1 = np.full(res, N1)
+y_N2 = np.full(res, N2)
+plt.plot(x_target, y_N1, color="red", label="N1")
+plt.plot(x_target, y_N2, color="red", label="N2")
+
+
 
 # PLOT XY DATA
 plt.plot(x, y, "ro-", color="blue")
@@ -54,4 +67,6 @@ plt.ylabel("y")
 # plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f s'))
 # plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f rad'))
 
+plt.grid()
+plt.legend()
 plt.show()

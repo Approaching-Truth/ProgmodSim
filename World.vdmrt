@@ -101,15 +101,15 @@ class World
             
             MySystem`controller.set_target(3.1415/8);
 
-            for i = 2 to 20 do (
+            for i = 2 to 30 do (
                 MySystem`controller.monitor_joint_angle();
                 MySystem`controller.update_velocity();
-                MySystem`arm.step(7);
+                MySystem`arm.step(9.5);
             );
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce5_log", str, <append>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce5_log", str, <start>);
             
             return true;
         )
