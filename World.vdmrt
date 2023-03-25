@@ -5,6 +5,10 @@ class World
 
     operations
 
+        -- Format data history
+        -- State histories are seperated by |
+        -- Variables partionens by /
+        -- Individual variabels by &
         public format_data_out: seq of (real * real * real) * seq of (real * real * real) ==> seq of char
         format_data_out(sh1, sh2) == (
             -- String to be manipulated
@@ -14,7 +18,7 @@ class World
             -- First att
             for tup in sh1 do (
                 dcl val: real := tup.#1;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
             );
 
             out_string := out_string ^ "/";
@@ -22,7 +26,7 @@ class World
             -- Second att
             for tup in sh1 do (
                 dcl val : real := tup.#2;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
             );
 
             out_string := out_string ^ "/";
@@ -30,7 +34,7 @@ class World
             -- Third att
             for tup in sh1 do (
                 dcl val : real := tup.#3;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
             );
 
             out_string := out_string ^ "|";
@@ -39,21 +43,21 @@ class World
             -- First att
             for tup in sh2 do (
                 dcl val: real := tup.#1;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
             );
             out_string := out_string ^ "/";
 
             -- Second att
             for tup in sh2 do (
                 dcl val : real := tup.#2;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
             );
             out_string := out_string ^ "/";
 
             -- Third att
             for tup in sh2 do (
                 dcl val : real := tup.#3;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "-";
+                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
             );
             out_string := out_string ^ "/";
 
@@ -84,7 +88,7 @@ class World
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("C:\\Users\\buste\\Desktop\\TEXTFILE", str, <append>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce1_log", str, <append>);
             
             return true;
         );
