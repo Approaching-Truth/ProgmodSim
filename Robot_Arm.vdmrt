@@ -4,7 +4,7 @@ instance variables
     public time_step : real; 
     public env_joint_angle : real; -- radians, current angle of arm
     public env_angular_velocity : real;
-    public data_history : seq of (real * real * real * real);
+    public state_history : seq of (real * real * real);
     
 values
     target_lb : real = 3.14/2 - 0.1; -- N1
@@ -18,12 +18,15 @@ operations
         time_step := 0;
         env_joint_angle := 0;
         env_angular_velocity := 0;
-        data_history := [];
+        state_history := [];
+        
+        -- Record state
+        record_state();
     );
 
     public record_state: () ==> ()
     record_state () == (
-        data_history := data_history ^ [mk_(time, time_step, env_joint_angle, env_angular_velocity)];
+        state_history := state_history ^ [mk_(time_step, env_joint_angle, env_angular_velocity)];
     );
 
 
@@ -61,6 +64,9 @@ operations
         env_angular_velocity := current_angular_velocity;
 
         time_step := time_step + delta;
+
+        -- Record state
+        record_state();
     ) 
     post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
 

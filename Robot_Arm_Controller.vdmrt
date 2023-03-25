@@ -4,7 +4,7 @@ class Robot_Arm_Controller
         public ctl_joint_angle: real;
         public ctl_angular_velocity: real;
         public acceptance_range: real;
-        public data_history: seq of (real * real * real);
+        public state_history: seq of (real * real * real);
 
     operations
         -- Constructor
@@ -14,12 +14,12 @@ class Robot_Arm_Controller
             ctl_joint_angle := 0;
             ctl_angular_velocity := 0;
             acceptance_range := 0.01;
-            data_history := [];
+            state_history := [];
         );
 
         public record_state: () ==> ()
         record_state() == (
-            data_history := data_history ^ [mk_(time, ctl_joint_angle, ctl_angular_velocity)]
+            state_history := state_history ^ [mk_(time, ctl_joint_angle, ctl_angular_velocity)]
         );
 
         public set_target: (real) ==> ()
