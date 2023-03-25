@@ -93,6 +93,26 @@ class World
             return true;
         );
 
+        public Scenario5 : () ==> bool
+        Scenario5() == (
+            dcl str : seq of char;
+            dcl succ : bool;
+
+            
+            MySystem`controller.set_target(3.1415/8);
+
+            for i = 2 to 20 do (
+                MySystem`controller.monitor_joint_angle();
+                MySystem`controller.update_velocity();
+                MySystem`arm.step(7);
+            );
+
+            -- Log results
+            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce5_log", str, <append>);
+            
+            return true;
+        )
 
 
         

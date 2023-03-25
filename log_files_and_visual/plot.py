@@ -7,7 +7,7 @@ import matplotlib.ticker as ticker
 # sys.path.append('PROGMOD_')
 
 # Get data
-f = open("log_files/sce1_log", "r")
+f = open("log_files/sce5_log", "r")
 lines : str = f.read()
 
 # Function for formatting file to array of specific variables
@@ -34,14 +34,15 @@ def txt_to_variable_array (data, sh_index, var_index):
 
 # GET XY DATA
 x = txt_to_variable_array(lines, 0, 0)
-y = txt_to_variable_array(lines, 0, 2)
+y = txt_to_variable_array(lines, 0, 1)
 
-# PLOT TARGET LINE
-target = 3.14/8
+# PLOT REFFERNCE LINE
+ref = 3.14/8
 x_start = 0
-x_end = 35
-x_target = np.linspace(x_start, x_end, 100)
-y_target = np.full(100, target)
+x_end = max(x)
+res = 100 # resolution
+x_target = np.linspace(x_start, x_end, res)
+y_target = np.full(100, ref)
 plt.plot(x_target, y_target, color="black")
 
 # PLOT XY DATA

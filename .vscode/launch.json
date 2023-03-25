@@ -1,12 +1,12 @@
 {
     "configurations": [
         {
-            "name": "Lens config: Launch World`scenario_1",
+            "name": "Lens config: Launch World`Scenario5",
             "type": "vdm",
             "request": "launch",
             "noDebug": true,
             "defaultName": "World",
-            "command": "p new World().scenario_1()"
+            "command": "p new World().Scenario5()"
         }
     ]
 }
