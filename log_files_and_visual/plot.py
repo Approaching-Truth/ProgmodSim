@@ -31,39 +31,39 @@ def txt_to_variable_array (data, sh_index, var_index):
     return (in_numbers, seperated, vars)
         
 
-# def plotxy (x, y, xlab, ylab, xunit, yunit):
-#     # PLOT REFFERNCE LINE
-#     ref = 3.14/8
-#     x_start = 0
-#     x_end = max(x)
-#     res = 100 # resolution
-#     x_target = np.linspace(x_start, x_end, res)
-#     y_target = np.full(100, ref)
-#     plt.plot(x_target, y_target, color="black", label="Target")
+def plotxy (x, y, xlab, ylab, xunit, yunit):
+    # PLOT REFFERNCE LINE
+    ref = 3.14/8
+    x_start = 0
+    x_end = max(x)
+    res = 100 # resolution
+    x_target = np.linspace(x_start, x_end, res)
+    y_target = np.full(100, ref)
+    plt.plot(x_target, y_target, color="black", label="Target")
 
-#     # Safe ranges
-#     N1 = 0
-#     N2 = 3.1415/4
-#     x_start = 0
-#     x_end = max(x)
-#     res = 100 # resolution
-#     y_N1 = np.full(res, N1)
-#     y_N2 = np.full(res, N2)
-#     plt.plot(x_target, y_N1, color="red", label="N1")
-#     plt.plot(x_target, y_N2, color="red", label="N2")
+    # Safe ranges
+    N1 = 0
+    N2 = 3.1415/4
+    x_start = 0
+    x_end = max(x)
+    res = 100 # resolution
+    y_N1 = np.full(res, N1)
+    y_N2 = np.full(res, N2)
+    plt.plot(x_target, y_N1, color="red", label="N1")
+    plt.plot(x_target, y_N2, color="red", label="N2")
 
-#     # PLOT XY DATA
-#     plt.plot(x, y, "ro-", color="blue")
-#     plt.xlabel(xlab)
-#     plt.ylabel(ylab)
+    # PLOT XY DATA
+    plt.plot(x, y, "ro-", color="blue")
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
 
-#     # SET UNITS
-#     plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter(f'%.1f {xunit}'))
-#     plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter(f'%.1f {yunit}'))
+    # SET UNITS
+    plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter(f'%.1f {xunit}'))
+    plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter(f'%.1f {yunit}'))
 
-#     plt.grid()
-#     plt.legend()
-#     plt.show()
+    plt.grid()
+    plt.legend()
+    plt.show()
 
 
 # Main
@@ -87,7 +87,7 @@ def main():
     print(v_str_seperated)
 
     #Plt
-    #plotxy(x_num, y_num, "Time", "Angle", "s", "rad")
+    plotxy(x_num, y_num, "Time", "Angle", "s", "rad")
     
     
 
