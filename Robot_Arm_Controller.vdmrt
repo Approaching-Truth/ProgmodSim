@@ -28,15 +28,9 @@ class Robot_Arm_Controller
             record_state();
         );
         
-        public set_velocity: (real) ==> ()
-        set_velocity(velocity) == duration (0) (
-            ctl_angular_velocity := velocity;
-            MySystem`arm.env_angular_velocity := velocity;
-            record_state();
-        );
 
-        public update_velocity: () ==> ()
-        update_velocity() == duration (0) (
+        public update_velocity: (real) ==> ()
+        update_velocity(c) == duration (5E8) (
             dcl angle_error : real;
             dcl new_velocity : real;
             
@@ -49,7 +43,7 @@ class Robot_Arm_Controller
             ) 
             -- Not in accepted range
             else (
-                new_velocity := angle_error * 0.2;
+                new_velocity := angle_error * c;
             );
             
             ctl_angular_velocity := new_velocity;
@@ -57,7 +51,7 @@ class Robot_Arm_Controller
         );
 
         public monitor_joint_angle: () ==> ()
-        monitor_joint_angle() == duration(0) (
+        monitor_joint_angle() == duration(1E8) (
             dcl env_angle: real := MySystem`arm.get_env_joint_angle();
             ctl_joint_angle := env_angle;
             record_state();

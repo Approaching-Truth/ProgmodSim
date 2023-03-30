@@ -1,10 +1,10 @@
 class Robot_Arm
 
 instance variables
-    public time_step : real; 
     public env_joint_angle : real; -- radians, current angle of arm
     public env_angular_velocity : real;
     public state_history : seq of (real * real * real);
+    public last_time : real;
     
 values
     target_lb : real = 3.14/2 - 0.1; -- N1
@@ -15,10 +15,10 @@ values
 operations
     public Robot_Arm: () ==> Robot_Arm
     Robot_Arm () == (
-        time_step := 0;
         env_joint_angle := 0;
         env_angular_velocity := 0;
         state_history := [];
+        last_time := 0;
         
         -- Record state
         record_state();
@@ -26,12 +26,17 @@ operations
 
     public record_state: () ==> ()
     record_state () == (
-        state_history := state_history ^ [mk_(time_step, env_joint_angle, env_angular_velocity)];
+        state_history := state_history ^ [mk_(last_time, env_joint_angle, env_angular_velocity)];
     );
 
 
-    public step: (real) ==> ()
-    step(delta) == duration(0) (
+    public step: () ==> ()
+    step() == duration(0) (
+        -- DECLARATION
+        -- Declare time variables
+        dcl t : real := time/1E9;
+        dcl delta : real := (t - last_time);
+
         -- Declare variables
         -- Fetch values 
         dcl current_joint_angle : real;
@@ -40,6 +45,11 @@ operations
         -- Compute New Values 
         dcl delta_joint_angle : real;
         dcl next_joint_angle : real;
+
+
+        -- COMPUTATION
+        last_time := t;
+
 
         -- UPDATE environment angular velocity
         env_angular_velocity := MySystem`controller.ctl_angular_velocity;
@@ -53,17 +63,9 @@ operations
         delta_joint_angle := current_angular_velocity * delta;
         next_joint_angle := current_joint_angle + delta_joint_angle;
 
-        
-        -- boundary --
-        -- We assume that the arm will simply stop when it reaches the boundaries
-        if(next_joint_angle >= safe_ub) then (next_joint_angle := safe_ub; current_angular_velocity := 0);
-        if(next_joint_angle <= safe_lb) then (next_joint_angle := safe_lb; current_angular_velocity := 0);
-
         -- SET NEW VALUES --
         env_joint_angle := next_joint_angle;
         env_angular_velocity := current_angular_velocity;
-
-        time_step := time_step + delta;
 
         -- Record state
         record_state();

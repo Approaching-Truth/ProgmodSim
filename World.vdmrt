@@ -69,26 +69,9 @@ class World
             dcl succ : bool;
             dcl str : seq of char;
 
-            MySystem`controller.set_target(3.1415/8);
-            MySystem`controller.monitor_joint_angle();
-            MySystem`controller.update_velocity();
-            MySystem`arm.step(7);
-
-            MySystem`controller.monitor_joint_angle();
-            MySystem`controller.update_velocity();
-            MySystem`arm.step(7);
-
-            MySystem`controller.monitor_joint_angle();
-            MySystem`controller.update_velocity();
-            MySystem`arm.step(7);
-
-            MySystem`controller.monitor_joint_angle();
-            MySystem`controller.update_velocity();
-            MySystem`arm.step(7);
-
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce1_log", str, <append>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce1_log", str, <start>);
             
             return true;
         );
@@ -101,11 +84,14 @@ class World
             
             MySystem`controller.set_target(3.1415/8);
 
-            for i = 2 to 30 do (
-                MySystem`controller.monitor_joint_angle();
-                MySystem`controller.update_velocity();
-                MySystem`arm.step(9.5);
-            );
+            for i = 1 to 5 do (
+                duration(6E9)skip; -- 6 s
+                MySystem`controller.monitor_joint_angle(); -- 0.1 s
+                MySystem`controller.update_velocity(0.2); -- 0.5 s
+                MySystem`arm.step(); -- 0 s
+            ); 
+            
+            -- 6,6 per cycle
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
