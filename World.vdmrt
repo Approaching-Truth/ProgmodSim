@@ -71,7 +71,7 @@ class World
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce1_log", str, <start>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce_log", str, <start>);
             
             return true;
         );
@@ -95,7 +95,7 @@ class World
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce5_log", str, <start>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce1_log", str, <start>);
             
             return true;
         );
@@ -119,7 +119,7 @@ class World
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce5_log", str, <start>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce2_log", str, <start>);
             
             return true;
         );
@@ -143,7 +143,7 @@ class World
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce5_log", str, <start>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce3_log", str, <start>);
             
             return true;
         );
@@ -167,7 +167,7 @@ class World
 
             -- Log results
             str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce5_log", str, <start>);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce4_log", str, <start>);
             
             return true;
         )
