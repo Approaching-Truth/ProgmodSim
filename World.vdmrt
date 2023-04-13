@@ -84,10 +84,10 @@ class World
             
             MySystem`controller.set_target(3.1415/8);
 
-            for i = 1 to 5 do (
-                duration(6E9)skip; -- 6 s
+            for i = 1 to 20 do (
+                duration(3E9)skip; -- 6 s
                 MySystem`controller.monitor_joint_angle(); -- 0.1 s
-                MySystem`controller.update_velocity(0.2); -- 0.5 s
+                MySystem`controller.update_velocity(0.5); -- 0.5 s
                 MySystem`arm.step(); -- 0 s
             ); 
             
