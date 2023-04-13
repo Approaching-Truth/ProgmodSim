@@ -73,7 +73,7 @@ def main():
     matplotlib.rcParams['font.family'] = "serif" # Set default family to serif
 
     # Get data
-    f = open("log_files/sce5_log", "r")
+    f = open("log_files/sce1_log", "r")
     lines : str = f.read()
 
     # GET XY DATA
@@ -81,10 +81,10 @@ def main():
     y_num, y_str, y_str_seperated = txt_to_variable_array(lines, 0, 1)
     v_num, v_str, v_str_seperated = txt_to_variable_array(lines, 0, 2)
 
-    # Print for table
-    print(x_str_seperated)
-    print(y_str_seperated)
-    print(v_str_seperated)
+    # # Print for table
+    # print(x_str_seperated)
+    # print(y_str_seperated)
+    # print(v_str_seperated)
 
     #Plt
     plotxy(x_num, y_num, "Time", "Angle", "s", "rad")
