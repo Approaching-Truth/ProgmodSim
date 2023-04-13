@@ -2,7 +2,10 @@ class Robot_Arm_Controller
     instance variables
         public target: real;
         public ctl_joint_angle: real;
+        public previous_angle_Error: real;
         public ctl_angular_velocity: real;
+        public ctl_angular_acceleration: real;
+        public ctl_motor_torque: real;
         public acceptance_range: real;
         public state_history: seq of (real * real * real);
 
@@ -12,7 +15,10 @@ class Robot_Arm_Controller
         Robot_Arm_Controller() == (
             target := 0;
             ctl_joint_angle := 0;
+            previous_angle_Error := 0;
             ctl_angular_velocity := 0;
+            ctl_angular_acceleration := 0;
+            ctl_motor_torque := 0;
             acceptance_range := 0.01;
             state_history := [];
         );
@@ -28,31 +34,32 @@ class Robot_Arm_Controller
             record_state();
         );
         
-
-        public update_velocity: (real) ==> ()
-        update_velocity(c) == duration (5E8) (
+        public find_target: () ==> ()
+        find_target() == duration (5E8) (
             dcl angle_error : real;
-            dcl new_velocity : real;
+            dcl new_torque : real;
             
             -- Calculate errror
             angle_error := target - ctl_joint_angle;
             
             -- In accepted range
             if ((angle_error < acceptance_range/2) and (angle_error > -acceptance_range/2)) then (
-                new_velocity := 0;
-            ) 
+                -- set stop mode
+            )
             -- Not in accepted range
             else (
-                new_velocity := angle_error * c;
+                new_torque := angle_error;
             );
             
-            ctl_angular_velocity := new_velocity;
+            ctl_motor_torque := new_torque;
+            previous_angle_Error := angle_error;
             record_state();
         );
+        
 
         public monitor_joint_angle: () ==> ()
         monitor_joint_angle() == duration(1E8) (
-            dcl env_angle: real := MySystem`arm.get_env_joint_angle();
+            dcl env_angle: real := MySystem`sensor.get_snr_joint_angle();
             ctl_joint_angle := env_angle;
             record_state();
         );

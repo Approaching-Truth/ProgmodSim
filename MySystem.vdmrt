@@ -2,20 +2,31 @@ system MySystem
 
 instance variables
 
-  public static arm: Robot_Arm := new Robot_Arm();
+  public static environment: Robot_Arm_Environment := new Robot_Arm_Environment();
   public static controller: Robot_Arm_Controller := new Robot_Arm_Controller();
+  public static sensor: Robot_Sensor := new Robot_Sensor();
+  public static motor: Robot_Motor := new Robot_Motor();
 
-  cpu1: CPU := new CPU(<FCFS>, 1e9);
-  cpu2: CPU := new CPU(<FCFS>, 1e9);
+  cpu1: CPU := new CPU(<FCFS>, 1e9); -- Environment
+  cpu2: CPU := new CPU(<FCFS>, 1e9); -- Controller
+  cpu3: CPU := new CPU(<FCFS>, 1e9); -- Sensor
+  cpu4: CPU := new CPU(<FCFS>, 1e9); -- Motor
+  
 
-  bus1: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu2})
+  bus1: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu3});
+  bus2: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu4});
+  
+  bus3: BUS := new BUS(<FCFS>, 1e100, {cpu3, cpu2});
+  bus4: BUS := new BUS(<FCFS>, 1e100, {cpu4, cpu2});
 
 operations
 
   public MySystem: () ==> MySystem
   MySystem() == (
-    cpu1.deploy(arm);
+    cpu1.deploy(environment);
     cpu2.deploy(controller);
+    cpu3.deploy(sensor);
+    cpu4.deploy(motor);
   );
 
 end MySystem

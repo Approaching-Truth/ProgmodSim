@@ -70,110 +70,22 @@ class World
             dcl str : seq of char;
 
             -- Log results
-            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
+            str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
             succ := io.fecho("log_files_and_visual\\log_files\\sce_log", str, <start>);
             
             return true;
         );
 
-        public Scenario1 : () ==> bool
-        Scenario1() == (
-            dcl str : seq of char;
+        public scenario1: () ==> bool
+        scenario1() == (
             dcl succ : bool;
-
-            
-            MySystem`controller.set_target(3.1415/8);
-
-            for i = 1 to 5 do (
-                duration(6E9)skip; -- 6 s
-                MySystem`controller.monitor_joint_angle(); -- 0.1 s
-                MySystem`controller.update_velocity(0.2); -- 0.5 s
-                MySystem`arm.step(); -- 0 s
-            ); 
-            
-            -- 6,6 per cycle
+            dcl str : seq of char;
 
             -- Log results
-            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce1_log", str, <start>);
+            str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
+            succ := io.fecho("log_files_and_visual\\log_files\\sce_log", str, <start>);
             
             return true;
         );
 
-        public Scenario2 : () ==> bool
-        Scenario2() == (
-            dcl str : seq of char;
-            dcl succ : bool;
-
-            
-            MySystem`controller.set_target(3.1415/8);
-
-            for i = 1 to 5 do (
-                duration(2E9)skip; -- 6 s
-                MySystem`controller.monitor_joint_angle(); -- 0.1 s
-                MySystem`controller.update_velocity(0.2); -- 0.5 s
-                MySystem`arm.step(); -- 0 s
-            ); 
-            
-            -- 6,6 per cycle
-
-            -- Log results
-            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce2_log", str, <start>);
-            
-            return true;
-        );
-
-        public Scenario3 : () ==> bool
-        Scenario3() == (
-            dcl str : seq of char;
-            dcl succ : bool;
-
-            
-            MySystem`controller.set_target(3.1415/8);
-
-            for i = 1 to 10 do (
-                duration(6E9)skip; -- 6 s
-                MySystem`controller.monitor_joint_angle(); -- 0.1 s
-                MySystem`controller.update_velocity(0.25); -- 0.5 s
-                MySystem`arm.step(); -- 0 s
-            ); 
-            
-            -- 6,6 per cycle
-
-            -- Log results
-            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce3_log", str, <start>);
-            
-            return true;
-        );
-
-        public Scenario4 : () ==> bool
-        Scenario4() == (
-            dcl str : seq of char;
-            dcl succ : bool;
-
-            
-            MySystem`controller.set_target(3.1415/8);
-
-            for i = 1 to 5 do (
-                duration(3E9)skip; -- 6 s
-                MySystem`controller.monitor_joint_angle(); -- 0.1 s
-                MySystem`controller.update_velocity(0.25); -- 0.5 s
-                MySystem`arm.step(); -- 0 s
-            ); 
-            
-            -- 6,6 per cycle
-
-            -- Log results
-            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce4_log", str, <start>);
-            
-            return true;
-        )
-
-
-        
-    
-        
 end World

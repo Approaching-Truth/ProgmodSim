@@ -1,0 +1,94 @@
+class Robot_Arm_Environment
+
+instance variables
+
+    public state_history : seq of (real * real * real);
+    public last_time : real;
+
+    public env_joint_angle : real; -- radians, current angle of arm
+    public env_angular_velocity : real;
+    public env_angular_acceleration : real;
+
+    public env_motor_torque : real;
+    public gravity_torque : real;
+    public friction_torque : real;
+    
+values
+    target_lb : real = 3.14/2 - 0.1; -- N1
+    target_ub : real = 3.14/2; -- N2
+    safe_lb : real = 0; -- 0pi = 0deg
+    safe_ub : real = 3.14/2; --1/2 pi = 90deg
+
+    arm_cylinder_mass : real = 6; -- kg
+    arm_cylinder_radius : real = 1; -- meter
+    arm_cylinder_moment_of_intertia : real = 1/3 * arm_cylinder_mass * arm_cylinder_radius ** 2;
+    arm_load_mass : real = 1; -- kg
+    public arm_load_moment_of_intertia : real = arm_load_mass * arm_cylinder_radius ** 2;
+    
+    moment_of_inertia_arm : real = arm_cylinder_moment_of_intertia + arm_load_moment_of_intertia;
+
+    gravitational_acceleration : real = 9.8159; -- m/s^2
+    
+operations
+
+    public Robot_Arm_Environment: () ==> Robot_Arm_Environment
+    Robot_Arm_Environment () == (
+        env_joint_angle := 0;
+        env_angular_velocity := 0;
+        state_history := [];
+        last_time := 0;
+        
+        -- Record state
+        record_state();
+    );
+
+    public record_state: () ==> ()
+    record_state () == (
+        state_history := state_history ^ [mk_(last_time, env_joint_angle, env_angular_velocity)];
+    );
+
+
+    public step: () ==> ()
+    step() == duration(0) (
+        -- DECLARATION
+        -- Declare time variables
+        dcl t : real := time/1E9;
+        dcl delta_t : real := (t - last_time);
+
+        -- Declare variables
+        -- Fetch values 
+        dcl current_joint_angle : real;
+        dcl current_angular_velocity : real;
+        dcl current_angular_acceleration : real;
+
+        -- Compute New Values 
+        dcl delta_joint_angle : real;
+        dcl delta_angular_velocity : real;
+
+        -- COMPUTATION
+        last_time := t;
+
+         -- Fetch Values
+        current_joint_angle := env_joint_angle;
+        current_angular_velocity := env_angular_velocity;
+        current_angular_acceleration := env_angular_acceleration;
+
+        -- UPDATE environment values
+            -- We update angle using old velocity
+        delta_joint_angle := current_angular_velocity * delta_t;
+        env_joint_angle := current_joint_angle + delta_joint_angle;
+            -- We update velocity using the old acceleration
+        delta_angular_velocity := current_angular_acceleration * delta_t;
+        env_angular_velocity := current_angular_velocity + delta_angular_velocity;
+            -- New acceleration is calculated from the motor torque
+                -- TO-DO: add gravity acceleration (and friction?)
+        env_angular_acceleration := env_motor_torque / moment_of_inertia_arm;
+
+        -- Record state
+        record_state();
+    ) 
+    post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
+
+    
+
+end Robot_Arm_Environment
