@@ -10,6 +10,7 @@ class Robot_Arm_Controller
         private last_time: real;
         private K_p : real;
         private K_d : real;
+        ctl_mode : <Initialisation> | <Normal> | <Emergency>;
     
     values
         update_rate : real = 5E8;
@@ -28,6 +29,7 @@ class Robot_Arm_Controller
             last_time := time/1E9;
             K_p := 0.1;
             K_d := 0.1;
+            ctl_mode := <Initialisation>;
         );
 
         public set_controller_params: real * real ==> ()
@@ -90,14 +92,48 @@ class Robot_Arm_Controller
             record_state();
         );
 
+        -- Applies counter torque to stop all movement of the arm
+        public stop_arm: () ==> ()
+        stop_arm() == (
+            skip;
+        ); 
+
         private loop: () ==> ()
+        
         loop() == duration(0) (
             monitor_joint_angle();
             find_target();
+
+            -- Check and switch mode
+            if (ctl_joint_angle >= MySystem`environment.safe_lb and ctl_joint_angle <= MySystem`environment.safe_ub) then (
+                ctl_mode := <Normal>;
+            ) else (
+                ctl_mode := <Emergency>;
+            );
+
+            -- Peform action based on mode 
+
+            -- Initialisation
+            -- If in Initialisation, do nothing
+            if (ctl_mode = <Initialisation>) then (
+                skip;
+            );
+            
+            -- Normal
+            -- Find target 
+            if (ctl_mode = <Normal>) then (
+                find_target();
+            );
+            
+            -- Emergency
+            -- Stop movement
+            if (ctl_mode = <Emergency>) then (
+                stop_arm();
+            );
         )
 
         thread
-            periodic(2E9, 0, 0, 0)(loop);
+            periodic(5E9, 0, 0, 0)(loop);
 
 
 end Robot_Arm_Controller

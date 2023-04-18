@@ -14,10 +14,10 @@ instance variables
     public friction_torque : real;
     
 values
-    target_lb : real = 3.14/2 - 0.1; -- N1
-    target_ub : real = 3.14/2; -- N2
-    safe_lb : real = 0; -- 0pi = 0deg
-    safe_ub : real = 3.14/2; --1/2 pi = 90deg
+    public target_lb : real = 3.14/2 - 0.1; -- N1
+    public target_ub : real = 3.14/2; -- N2
+    public safe_lb : real = 0; -- 0pi = 0deg
+    public safe_ub : real = 3.14/2; --1/2 pi = 90deg
 
     arm_cylinder_mass : real = 6; -- kg
     arm_cylinder_radius : real = 1; -- meter

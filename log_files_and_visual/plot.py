@@ -73,7 +73,7 @@ def main():
     matplotlib.rcParams['font.family'] = "serif" # Set default family to serif
 
     # Get data
-    f = open("log_files/sce_log", "r")
+    f = open("log_files/scet_log", "r")
     lines : str = f.read()
 
     # GET XY DATA

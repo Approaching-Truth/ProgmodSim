@@ -69,7 +69,7 @@ class World
             dcl succ : bool;
             dcl str : seq of char;
 
-            MySystem`environment.setFinalSimulationTime(200E9);
+            MySystem`environment.setFinalSimulationTime(20E9);
             MySystem`controller.set_target(3.1415/4);
             MySystem`controller.set_controller_params(0.01, 0.01);
 
@@ -77,11 +77,12 @@ class World
             start(MySystem`controller);
             start(MySystem`sensor);
             
+            
             MySystem`environment.isFinished();
 
             -- Log results
             str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce_log", str, <start>);
+            succ := io.fecho("log_files_and_visual\\log_files\\scet_log", str, <start>);
             
             return true;
         );
