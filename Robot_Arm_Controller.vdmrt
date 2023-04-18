@@ -2,12 +2,17 @@ class Robot_Arm_Controller
     instance variables
         public target: real;
         public ctl_joint_angle: real;
-        public previous_angle_Error: real;
+        public previous_angle_error: real;
         public ctl_angular_velocity: real;
         public ctl_angular_acceleration: real;
-        public ctl_motor_torque: real;
         public acceptance_range: real;
         public state_history: seq of (real * real * real);
+        private last_time: real;
+        private K_p : real;
+        private K_d : real;
+    
+    values
+        update_rate : real = 5E8;
 
     operations
         -- Constructor
@@ -15,13 +20,22 @@ class Robot_Arm_Controller
         Robot_Arm_Controller() == (
             target := 0;
             ctl_joint_angle := 0;
-            previous_angle_Error := 0;
+            previous_angle_error := 0;
             ctl_angular_velocity := 0;
             ctl_angular_acceleration := 0;
-            ctl_motor_torque := 0;
             acceptance_range := 0.01;
             state_history := [];
+            last_time := time/1E9;
+            K_p := 0.1;
+            K_d := 0.1;
         );
+
+        public set_controller_params: real * real ==> ()
+        set_controller_params (K_p_in, K_d_in) == (
+            K_p := K_p_in;
+            K_d := K_d_in;
+        );
+
 
         public record_state: () ==> ()
         record_state() == (
@@ -37,23 +51,34 @@ class Robot_Arm_Controller
         public find_target: () ==> ()
         find_target() == duration (5E8) (
             dcl angle_error : real;
+            dcl delta_angle_error : real;
             dcl new_torque : real;
+            dcl delta_t : real;
+            dcl t : real;
+            t := time/1E9;
+            delta_t := t - last_time;
+            last_time := t;
             
             -- Calculate errror
             angle_error := target - ctl_joint_angle;
+            delta_angle_error := (angle_error - previous_angle_error) / delta_t;
             
-            -- In accepted range
+            /*
+             -- In accepted range
             if ((angle_error < acceptance_range/2) and (angle_error > -acceptance_range/2)) then (
                 -- set stop mode
-                skip
+                skip;
             )
             -- Not in accepted range
             else (
-                new_torque := angle_error;
             );
+            */
+           
+            new_torque := K_p * angle_error + K_d * delta_angle_error;
             
-            ctl_motor_torque := new_torque;
-            previous_angle_Error := angle_error;
+            MySystem`motor.set_torque(new_torque);
+
+            previous_angle_error := angle_error;
             record_state();
         );
         
@@ -64,6 +89,15 @@ class Robot_Arm_Controller
             ctl_joint_angle := env_angle;
             record_state();
         );
+
+        private loop: () ==> ()
+        loop() == duration(0) (
+            monitor_joint_angle();
+            find_target();
+        )
+
+        thread
+            periodic(2E9, 0, 0, 0)(loop);
 
 
 end Robot_Arm_Controller

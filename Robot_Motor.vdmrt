@@ -1,33 +1,35 @@
 class Robot_Motor
     instance variables
-    snr_motor_torque : real;
+        act_motor_torque : real;
 
     values
-    maximum_torque : real = 100;
-    minimum_torque : real = -maximum_torque;
+        maximum_torque : real = 100;
+        minimum_torque : real = -maximum_torque;
         
     operations
 
     public Robot_Motor: () ==> Robot_Motor
     Robot_Motor () == (
-        snr_motor_torque := 0;
+        act_motor_torque := 0;
     );
 
     public set_torque: (real) ==> ()
     set_torque (torque) == (
-        dcl ltorque : real := torque;
-        if(torque > maximum_torque) then ltorque := maximum_torque;
-        if(torque < minimum_torque) then ltorque := minimum_torque;
+        dcl new_torque : real := torque;
+
+        -- Check boundaries
+        if(torque > maximum_torque) then new_torque := maximum_torque;
+        if(torque < minimum_torque) then new_torque := minimum_torque;
         
-        snr_motor_torque := ltorque;
-        MySystem`environment.env_motor_torque := ltorque;
+        -- Set torque
+        act_motor_torque := new_torque;
     );
 
     public get_torque: () ==> real
     get_torque () == (
         -- We assume that the environment will not change the torque
         -- So we always know that snr and env torque is the same
-        return snr_motor_torque;
+        return act_motor_torque;
     );
 
 end Robot_Motor

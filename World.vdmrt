@@ -69,6 +69,16 @@ class World
             dcl succ : bool;
             dcl str : seq of char;
 
+            MySystem`environment.setFinalSimulationTime(200E9);
+            MySystem`controller.set_target(3.1415/4);
+            MySystem`controller.set_controller_params(0.01, 0.01);
+
+            start(MySystem`environment);
+            start(MySystem`controller);
+            start(MySystem`sensor);
+            
+            MySystem`environment.isFinished();
+
             -- Log results
             str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
             succ := io.fecho("log_files_and_visual\\log_files\\sce_log", str, <start>);
@@ -76,38 +86,6 @@ class World
             return true;
         );
 
-        public scenario1: () ==> bool
-        scenario1() == (
-            dcl succ : bool;
 
-            
-            MySystem`controller.set_target(3.1415/8);
-
-            for i = 1 to 5 do (
-                duration(6E9)skip; -- 6 s
-                MySystem`controller.monitor_joint_angle(); -- 0.1 s
-                MySystem`controller.update_velocity(0.2); -- 0.5 s
-                MySystem`arm.step(); -- 0 s
-            ); 
-            
-            -- 6,6 per cycle
-
-            -- Log results
-            str := format_data_out(MySystem`arm.state_history, MySystem`arm.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce1_log", str, <start>);
-            
-            return true;
-        );
-
-        public Scenario2 : () ==> bool
-        Scenario2() == (
-            dcl str : seq of char;
-
-            -- Log results
-            str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce_log", str, <start>);
-            
-            return true;
-        );
 
 end World

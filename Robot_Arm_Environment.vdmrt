@@ -1,7 +1,8 @@
 class Robot_Arm_Environment
 
 instance variables
-
+    -- Simulation related
+    private final_sim_time : real;
     public state_history : seq of (real * real * real);
     public last_time : real;
 
@@ -9,7 +10,6 @@ instance variables
     public env_angular_velocity : real;
     public env_angular_acceleration : real;
 
-    public env_motor_torque : real;
     public gravity_torque : real;
     public friction_torque : real;
     
@@ -35,11 +35,22 @@ operations
     Robot_Arm_Environment () == (
         env_joint_angle := 0;
         env_angular_velocity := 0;
+        env_angular_acceleration := 0;
         state_history := [];
         last_time := 0;
         
-        -- Record state
+        -- Record state & simtime
         record_state();
+        final_sim_time := 0;
+    );
+
+
+    public isFinished : () ==> ()
+    isFinished() == skip;
+
+    public setFinalSimulationTime : (real) ==> ()
+    setFinalSimulationTime(time_to_simulate) == (
+        final_sim_time := time_to_simulate;
     );
 
     public record_state: () ==> ()
@@ -68,26 +79,35 @@ operations
         -- COMPUTATION
         last_time := t;
 
-         -- Fetch Values
+         -- Fetch Valuesx½
         current_joint_angle := env_joint_angle;
         current_angular_velocity := env_angular_velocity;
         current_angular_acceleration := env_angular_acceleration;
 
         -- UPDATE environment values
-            -- We update angle using old velocity
+        -- We update angle using old velocity
         delta_joint_angle := current_angular_velocity * delta_t;
         env_joint_angle := current_joint_angle + delta_joint_angle;
-            -- We update velocity using the old acceleration
+
+
+        -- We update velocity using the old acceleration
         delta_angular_velocity := current_angular_acceleration * delta_t;
         env_angular_velocity := current_angular_velocity + delta_angular_velocity;
-            -- New acceleration is calculated from the motor torque
-                -- TO-DO: add gravity acceleration (and friction?)
-        env_angular_acceleration := env_motor_torque / moment_of_inertia_arm;
+        -- New acceleration is calculated from the motor torque
+        -- TO-DO: add gravity acceleration (and friction?)
+        
+        env_angular_acceleration := MySystem`motor.get_torque() / moment_of_inertia_arm;
 
         -- Record state
         record_state();
     ) 
-    post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
+    --post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
+
+    sync
+        per isFinished => (time > final_sim_time);
+
+    thread
+        periodic(1E8, 0, 0, 0)(step);
 
     
 

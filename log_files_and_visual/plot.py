@@ -43,7 +43,7 @@ def plotxy (x, y, xlab, ylab, xunit, yunit):
 
     # Safe ranges
     N1 = 0
-    N2 = 3.1415/4
+    N2 = 3.14/2
     x_start = 0
     x_end = max(x)
     res = 100 # resolution
@@ -73,7 +73,7 @@ def main():
     matplotlib.rcParams['font.family'] = "serif" # Set default family to serif
 
     # Get data
-    f = open("log_files/sce1_log", "r")
+    f = open("log_files/sce_log", "r")
     lines : str = f.read()
 
     # GET XY DATA
