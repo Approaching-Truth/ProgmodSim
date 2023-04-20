@@ -22,14 +22,17 @@ instance variables
   bus2: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu4}); -- Env - Motor
   bus3: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu5}); -- Env - Motion Sensor
   bus4: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu6}); -- Env - UI
-  bus5: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu7}); -- Env - UI
+  bus5: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu7}); -- Env - Events
   
   
   bus6: BUS := new BUS(<FCFS>, 1e100, {cpu3, cpu2}); -- Controller - Angle sensor 
   bus7: BUS := new BUS(<FCFS>, 1e100, {cpu4, cpu2}); -- Controller - Motor
   bus8: BUS := new BUS(<FCFS>, 1e100, {cpu5, cpu2}); -- Controller - Motion sensor
   bus9: BUS := new BUS(<FCFS>, 1e100, {cpu6, cpu2}); -- Controller - UI
-  bus10: BUS := new BUS(<FCFS>, 1e100, {cpu2, cpu7}); -- Env - UI
+  bus10: BUS := new BUS(<FCFS>, 1e100, {cpu2, cpu7}); -- Controller - Events
+
+  bus11: BUS := new BUS(<FCFS>, 1e100, {cpu6, cpu7}); -- Controller - Events
+
 
 operations
 

@@ -44,10 +44,11 @@ operations
                 if (e = <EnvironmentalObstacleRemoved>) then (
                     MySystem`motion_sensor.sensor_clear();
                 );
-            )
+            );
+           events := tl events;
+
         );
         -- Remove event from queue
-        events := tl events;
     );
 
 thread

@@ -83,6 +83,7 @@ class World
             start(MySystem`environment);
             start(MySystem`controller);
             start(MySystem`sensor);
+            start(MySystem`events);
             
             
             MySystem`environment.isFinished();
