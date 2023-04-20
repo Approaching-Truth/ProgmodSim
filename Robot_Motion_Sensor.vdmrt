@@ -1,0 +1,26 @@
+class Robot_Motion_Sensor
+    instance variables
+        private motion_sensor_status : <Obstacle> | <Clear>;
+    
+    operations
+       public Robot_Motion_Sensor: () ==> Robot_Motion_Sensor
+        Robot_Motion_Sensor () == (
+            motion_sensor_status := <Clear>;
+        );
+
+        public sensor_obstacle: () ==> ()
+        sensor_obstacle () == (
+            motion_sensor_status := <Obstacle>;
+        );
+        
+        public sensor_clear: () ==> ()
+        sensor_clear () == (
+            motion_sensor_status := <Clear>;
+        );
+
+        public get_motion_sensor_status: () ==> <Obstacle> | <Clear>
+        get_motion_sensor_status () == (
+            return motion_sensor_status;
+        )
+
+end Robot_Motion_Sensor

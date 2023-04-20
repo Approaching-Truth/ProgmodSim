@@ -1,0 +1,23 @@
+class Robot_Arm_UI
+    instance variables
+        target_joint_angle : real;
+    
+    operations
+        public Robot_Arm_UI: () ==> Robot_Arm_UI
+        Robot_Arm_UI () == (
+            target_joint_angle := 0;
+        );
+
+        -- Set. Called from simulation event
+        public set_target_joint_angle: (real) ==> ()
+        set_target_joint_angle (angle) == (
+            target_joint_angle := angle;
+        );
+
+        -- Get, called from controller
+        public get_target_joint_angle: () ==> real
+        get_target_joint_angle () == (
+            return target_joint_angle;
+        );
+
+end Robot_Arm_UI

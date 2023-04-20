@@ -1,0 +1,56 @@
+class Robot_Arm_Events
+
+types
+    public Event = <NewTarget> | <MotorFailure> | <MotorRepaired> | <MechanicalFailure> | <EnvironmentalObstacleDetected> | <EnvironmentalObstacleRemoved> | <UnknownEnvironment>;
+
+instance variables
+    private events : seq of (real * Event * real);
+
+operations
+    -- Constructor
+    public Robot_Arm_Events: () ==> Robot_Arm_Events
+    Robot_Arm_Events () == (
+        events := [];
+    );
+    
+    -- queueEvent method
+    -- t = time, e = event, d = data
+    public queueEvent: real * Event * real ==> ()
+    queueEvent (t, e, d) == duration(0) (
+        events := events ^ [mk_(t, e, d)];
+
+    );
+
+    public createEvent: () ==> ()
+    createEvent() == duration(0) (
+        -- If any events
+        if len events > 0 then (
+            let mk_(t, e, d) = hd events
+            -- If time to do have expired
+            in if t <= time then (
+                -- Cases
+                if (e = <NewTarget>) then (
+                    MySystem`ui.set_target_joint_angle(d);
+                );
+                if (e = <MotorFailure>) then (
+                    MySystem`motor.motor_failed();
+                );
+                if (e = <MotorRepaired>) then (
+                    MySystem`motor.motor_repaired();
+                );
+                if (e = <EnvironmentalObstacleDetected>) then (
+                    MySystem`motion_sensor.sensor_obstacle();
+                );
+                if (e = <EnvironmentalObstacleRemoved>) then (
+                    MySystem`motion_sensor.sensor_clear();
+                );
+            )
+        );
+        -- Remove event from queue
+        events := tl events;
+    );
+
+thread
+    periodic(1E8, 0, 0, 0)(createEvent);
+
+end Robot_Arm_Events

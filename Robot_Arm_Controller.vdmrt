@@ -1,6 +1,5 @@
 class Robot_Arm_Controller
     instance variables
-        public target: real;
         public ctl_joint_angle: real;
         public previous_angle_error: real;
         public ctl_angular_velocity: real;
@@ -10,7 +9,7 @@ class Robot_Arm_Controller
         private last_time: real;
         private K_p : real;
         private K_d : real;
-        ctl_mode : <Initialisation> | <Normal> | <Emergency>;
+        public ctl_mode : <Initialisation> | <Normal> | <Emergency>;
     
     values
         update_rate : real = 5E8;
@@ -19,7 +18,6 @@ class Robot_Arm_Controller
         -- Constructor
         public Robot_Arm_Controller: () ==> Robot_Arm_Controller
         Robot_Arm_Controller() == (
-            target := 0;
             ctl_joint_angle := 0;
             previous_angle_error := 0;
             ctl_angular_velocity := 0;
@@ -43,23 +41,23 @@ class Robot_Arm_Controller
         record_state() == (
             state_history := state_history ^ [mk_(time, ctl_joint_angle, ctl_angular_velocity)]
         );
-
-        public set_target: (real) ==> ()
-        set_target(angle) == duration (0) (
-            target := angle;
-            record_state();
-        );
         
         public find_target: () ==> ()
         find_target() == duration (5E8) (
+            dcl target : real;
             dcl angle_error : real;
             dcl delta_angle_error : real;
             dcl new_torque : real;
             dcl delta_t : real;
             dcl t : real;
+            
+            -- Set timing local variabels
             t := time/1E9;
             delta_t := t - last_time;
             last_time := t;
+
+            -- Get target from UI
+            target := MySystem`ui.get_target_joint_angle();
             
             -- Calculate errror
             angle_error := target - ctl_joint_angle;
@@ -92,10 +90,20 @@ class Robot_Arm_Controller
             record_state();
         );
 
-        -- Applies counter torque to stop all movement of the arm
-        public stop_arm: () ==> ()
-        stop_arm() == (
-            skip;
+        -- Applies emergency break which stops all motion!
+        -- NOTE: This is a quick fix, and will be changed to later iterations!
+        public emergency_break: () ==> ()
+        emergency_break() == (
+            -- Set env var to 0
+            MySystem`environment.env_angular_acceleration := 0;
+            MySystem`environment.env_angular_velocity := 0;
+
+            -- Set ctl var to 0
+            ctl_angular_acceleration := 0;
+            ctl_angular_velocity := 0;
+
+            -- Set motor torque to 0
+            MySystem`motor.set_torque(0);
         ); 
 
         private loop: () ==> ()
@@ -105,7 +113,12 @@ class Robot_Arm_Controller
             find_target();
 
             -- Check and switch mode
-            if (ctl_joint_angle >= MySystem`environment.safe_lb and ctl_joint_angle <= MySystem`environment.safe_ub) then (
+            if (    ctl_joint_angle >= MySystem`environment.safe_lb 
+                and ctl_joint_angle <= MySystem`environment.safe_ub 
+                and MySystem`motor.get_operation_status() = <Working>
+                and MySystem`motion_sensor.get_motion_sensor_status() = <Clear>
+                ) 
+            then (
                 ctl_mode := <Normal>;
             ) else (
                 ctl_mode := <Emergency>;
@@ -128,7 +141,7 @@ class Robot_Arm_Controller
             -- Emergency
             -- Stop movement
             if (ctl_mode = <Emergency>) then (
-                stop_arm();
+                emergency_break();
             );
         )
 

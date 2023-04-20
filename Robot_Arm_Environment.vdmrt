@@ -45,6 +45,7 @@ operations
     );
 
 
+
     public isFinished : () ==> ()
     isFinished() == skip;
 

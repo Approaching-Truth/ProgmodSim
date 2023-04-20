@@ -1,6 +1,10 @@
 class Robot_Motor
+    types
+        public Status = <Working> | <Failed>;
+
     instance variables
         act_motor_torque : real;
+        operation_status : Status;
 
     values
         maximum_torque : real = 100;
@@ -8,28 +12,49 @@ class Robot_Motor
         
     operations
 
-    public Robot_Motor: () ==> Robot_Motor
-    Robot_Motor () == (
-        act_motor_torque := 0;
-    );
-
-    public set_torque: (real) ==> ()
-    set_torque (torque) == (
-        dcl new_torque : real := torque;
-
-        -- Check boundaries
-        if(torque > maximum_torque) then new_torque := maximum_torque;
-        if(torque < minimum_torque) then new_torque := minimum_torque;
+        public Robot_Motor: () ==> Robot_Motor
+        Robot_Motor () == (
+            act_motor_torque := 0;
+            operation_status := <Working>;
+        );
         
-        -- Set torque
-        act_motor_torque := new_torque;
-    );
+        -- Simulation event methods 
+        public motor_failed: () ==> ()
+        motor_failed () == duration(0) (
+            operation_status := <Failed>;
+        );
+        
+        public motor_repaired: () ==> ()
+        motor_repaired () == duration(0) (
+            operation_status := <Working>;
+        );
 
-    public get_torque: () ==> real
-    get_torque () == (
-        -- We assume that the environment will not change the torque
-        -- So we always know that snr and env torque is the same
-        return act_motor_torque;
-    );
+        public get_operation_status: () ==> Status
+        get_operation_status () == (
+            return operation_status;
+        );
+
+        -- Operation methods
+        public set_torque: (real) ==> ()
+        set_torque (torque) == (
+            -- If operation status is normal then torque can be set
+            if (operation_status = <Working>) then (
+                dcl new_torque : real := torque;
+
+                if(torque > maximum_torque) then new_torque := maximum_torque;
+                if(torque < minimum_torque) then new_torque := minimum_torque;
+                
+                -- Set torque
+                act_motor_torque := new_torque;
+            )
+            -- Else torque cannot be set
+        );
+
+        public get_torque: () ==> real
+        get_torque () == (
+            -- We assume that the environment will not change the torque
+            -- So we always know that snr and env torque is the same
+            return act_motor_torque;
+        );
 
 end Robot_Motor
