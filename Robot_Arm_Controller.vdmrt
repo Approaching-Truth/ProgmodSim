@@ -1,6 +1,7 @@
 class Robot_Arm_Controller
     instance variables
         public ctl_joint_angle: real;
+        public ctl_target_joint_angle: real;
         public previous_angle_error: real;
         public ctl_angular_velocity: real;
         public ctl_angular_acceleration: real;
@@ -18,6 +19,7 @@ class Robot_Arm_Controller
         -- Constructor
         public Robot_Arm_Controller: () ==> Robot_Arm_Controller
         Robot_Arm_Controller() == (
+            ctl_target_joint_angle := -1; -- Will be overwritten
             ctl_joint_angle := 0;
             previous_angle_error := 0;
             ctl_angular_velocity := 0;
@@ -57,7 +59,7 @@ class Robot_Arm_Controller
             last_time := t;
 
             -- Get target from UI
-            target := MySystem`ui.get_target_joint_angle();
+            target := ctl_target_joint_angle;
             
             -- Calculate errror
             angle_error := target - ctl_joint_angle;
@@ -82,12 +84,20 @@ class Robot_Arm_Controller
             record_state();
         );
         
-
+        -- Sense joint angle
         public monitor_joint_angle: () ==> ()
         monitor_joint_angle() == duration(1E8) (
             dcl env_angle: real := MySystem`sensor.get_snr_joint_angle();
             ctl_joint_angle := env_angle;
             record_state();
+        );
+
+        -- Update target
+        public update_target: () ==> ()
+        update_target () == duration(0)(
+            if not (MySystem`ui.get_target_joint_angle() = ctl_target_joint_angle) then (
+                ctl_target_joint_angle := MySystem`ui.get_target_joint_angle()
+            );
         );
 
         -- Applies emergency break which stops all motion!
@@ -109,7 +119,13 @@ class Robot_Arm_Controller
         private loop: () ==> ()
         
         loop() == duration(0) (
+            -- Get current joint angle
             monitor_joint_angle();
+
+            -- Check if target have changed
+            update_target();
+
+            -- Calculate new torque
             find_target();
 
             -- Check and switch mode

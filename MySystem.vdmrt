@@ -32,6 +32,8 @@ instance variables
   bus10: BUS := new BUS(<FCFS>, 1e100, {cpu2, cpu7}); -- Controller - Events
 
   bus11: BUS := new BUS(<FCFS>, 1e100, {cpu6, cpu7}); -- Controller - Events
+  bus12: BUS := new BUS(<FCFS>, 1e100, {cpu4, cpu7}); -- Motor - Events
+ 
 
 
 operations
