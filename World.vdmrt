@@ -69,17 +69,20 @@ class World
             dcl succ : bool;
             dcl str : seq of char; 
 
-            MySystem`environment.setFinalSimulationTime(15E9);
+            MySystem`environment.setFinalSimulationTime(150E9);
 
             -- Set COntroller params
             MySystem`controller.set_controller_params(0.05, 0.08);
 
             -- Add events
-            MySystem`events.queueEvent(0E9, <NewTarget>, 3.1415/4);
+            --MySystem`events.queueEvent(0E9, <NewTarget>, 3.1415/4);
             MySystem`events.queueEvent(5E9, <NewTarget>, 3.1415/8);
-            MySystem`events.queueEvent(10E9, <NewTarget>, 50);
+            MySystem`events.queueEvent(10E9, <ObstacleDetected>, -1);
             -- MySystem`events.queueEvent(5E9, <MotorFailure>, -1);
-            -- MySystem`events.queueEvent(20E9, <MotorRepaired>, -1);
+            MySystem`events.queueEvent(20E9, <ObstacleRemoved>, -1);
+            
+             MySystem`events.queueEvent(80E9, <NewTarget>, 3.1415/4);
+
 
             -- Start Simulation
             start(MySystem`environment);
@@ -92,25 +95,37 @@ class World
 
             -- Log results
             str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\sce_test_log", str, <start>);
+            succ := io.fecho("/home/julius/Project_modellering/PROGMOD_RG1/log_files_and_visual/log_files/newlog", str, <start>);
             
             return true;
         );
 
-        public scenario_exercise1: () ==> bool
-        scenario_exercise1() == (
+       public scenario2: () ==> bool
+        scenario2() == (
             dcl succ : bool;
-            dcl str : seq of char;
+            dcl str : seq of char; 
 
-            MySystem`environment.setFinalSimulationTime(100E9);
+            MySystem`environment.setFinalSimulationTime(150E9);
+
+            -- Set COntroller params
             MySystem`controller.set_controller_params(0.05, 0.08);
 
-            MySystem`events.queueEvent(0, <NewTarget>, 3.1415/8);
+            -- Add events
+            --MySystem`events.queueEvent(0E9, <NewTarget>, 3.1415/4);
+            MySystem`events.queueEvent(5E9, <NewTarget>, 3.1415/8);
+            MySystem`events.queueEvent(10E9, <MotorFailure>, -1);
+            -- MySystem`events.queueEvent(5E9, <MotorFailure>, -1);
+            MySystem`events.queueEvent(20E9, <MotorRepaired>, -1);
+            
+             MySystem`events.queueEvent(80E9, <NewTarget>, 3.1415/4);
 
+
+            -- Start Simulation
             start(MySystem`environment);
             start(MySystem`controller);
             start(MySystem`sensor);
             start(MySystem`events);
+            
             
             MySystem`environment.isFinished();
 
@@ -120,6 +135,7 @@ class World
             
             return true;
         );
+
 
 
 

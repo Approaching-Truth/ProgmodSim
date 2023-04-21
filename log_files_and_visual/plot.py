@@ -33,13 +33,16 @@ def txt_to_variable_array (data, sh_index, var_index):
 
 def plotxy (x, y, xlab, ylab, xunit, yunit):
     # PLOT REFFERNCE LINE
-    ref = 3.14/8
+    ref1 = 3.14/4
+    ref2 = 3.14/8
     x_start = 0
     x_end = max(x)
     res = 100 # resolution
     x_target = np.linspace(x_start, x_end, res)
-    y_target = np.full(100, ref)
-    plt.plot(x_target, y_target, color="black", label="Target")
+    y_target = np.full(100, ref1)
+    plt.plot(x_target, y_target, color="black", label="Target 1 - PI/8")
+    y_target = np.full(100, ref2)
+    plt.plot(x_target, y_target, color="black", label="Target 2 - PI/4")
 
     # Safe ranges
     N1 = 0
@@ -73,7 +76,7 @@ def main():
     matplotlib.rcParams['font.family'] = "serif" # Set default family to serif
 
     # Get data
-    f = open("log_files/sce_test_log", "r")
+    f = open("log_files/newlog", "r")
     lines : str = f.read()
 
     # GET XY DATA
