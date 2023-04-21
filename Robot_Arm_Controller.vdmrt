@@ -74,7 +74,7 @@ class Robot_Arm_Controller
             );
             */
            
-            new_torque := K_p * angle_error + K_d * delta_angle_error;
+            new_torque := K_p * angle_error + K_d * delta_angle_error - 0.5 * ctl_angular_velocity;
             
             MySystem`motor.set_torque(new_torque);
 
@@ -86,7 +86,9 @@ class Robot_Arm_Controller
         public monitor_joint_angle: () ==> ()
         monitor_joint_angle() == duration(1E8) (
             dcl env_angle: real := MySystem`sensor.get_snr_joint_angle();
+            dcl env_angular_velocity: real := MySystem`sensor.get_snr_angular_velocty();
             ctl_joint_angle := env_angle;
+            ctl_angular_velocity := env_angular_velocity;
             record_state();
         );
 

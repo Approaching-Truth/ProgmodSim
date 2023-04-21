@@ -72,7 +72,7 @@ class World
             MySystem`environment.setFinalSimulationTime(20E9);
 
             -- Set COntroller params
-            MySystem`controller.set_controller_params(0.01, 0.01);
+            MySystem`controller.set_controller_params(0.05, 0.08);
 
             -- Add events
             MySystem`events.queueEvent(0, <NewTarget>, 3.1415/8);
@@ -91,6 +91,30 @@ class World
             -- Log results
             str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
             succ := io.fecho("log_files_and_visual\\log_files\\sce_test_log", str, <start>);
+            
+            return true;
+        );
+
+        public scenario_exercise1: () ==> bool
+        scenario_exercise1() == (
+            dcl succ : bool;
+            dcl str : seq of char;
+
+            MySystem`environment.setFinalSimulationTime(100E9);
+            MySystem`controller.set_controller_params(0.05, 0.08);
+
+            MySystem`events.queueEvent(0, <NewTarget>, 3.1415/8);
+
+            start(MySystem`environment);
+            start(MySystem`controller);
+            start(MySystem`sensor);
+            
+            
+            MySystem`environment.isFinished();
+
+            -- Log results
+            str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
+            succ := io.fecho("log_files_and_visual\\log_files\\scet_log", str, <start>);
             
             return true;
         );
