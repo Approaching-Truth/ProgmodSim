@@ -110,13 +110,13 @@ class World
             start(MySystem`environment);
             start(MySystem`controller);
             start(MySystem`sensor);
-            
+            start(MySystem`events);
             
             MySystem`environment.isFinished();
 
             -- Log results
             str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\scet_log", str, <start>);
+            succ := io.fecho("/home/julius/Project_modellering/PROGMOD_RG1/log_files_and_visual/log_files/newlog", str, <start>);
             
             return true;
         );
