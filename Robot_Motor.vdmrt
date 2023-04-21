@@ -41,8 +41,9 @@ class Robot_Motor
             if (operation_status = <Working>) then (
                 dcl new_torque : real := torque;
 
-                if(torque > maximum_torque) then new_torque := maximum_torque;
-                if(torque < minimum_torque) then new_torque := minimum_torque;
+                -- NOTE: Udkommenteret indtil vi inder på de rigtige værdier
+                -- if(torque > maximum_torque) then new_torque := maximum_torque;
+                -- if(torque < minimum_torque) then new_torque := minimum_torque;
                 
                 -- Set torque
                 act_motor_torque := new_torque;

@@ -12,6 +12,9 @@ instance variables
 
     public gravity_torque : real;
     public friction_torque : real;
+
+    private step_cycles : int;
+    private log_sample_rate : int; -- Unit: same as periodic step rate
     
 values
     public target_lb : real = 3.14/2 - 0.1; -- N1
@@ -38,6 +41,7 @@ operations
         env_angular_acceleration := 0;
         state_history := [];
         last_time := 0;
+        step_cycles := 0;
         
         -- Record state & simtime
         record_state();
@@ -100,7 +104,10 @@ operations
         env_angular_acceleration := MySystem`motor.get_torque() / moment_of_inertia_arm;
 
         -- Record state
-        record_state();
+        if(step_cycles mod 10 = 0) then (
+            record_state();
+        );
+        step_cycles := step_cycles + 1;
     ) 
     --post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
 
