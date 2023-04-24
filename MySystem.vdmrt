@@ -33,6 +33,7 @@ instance variables
 
   bus11: BUS := new BUS(<FCFS>, 1e100, {cpu6, cpu7}); -- Controller - Events
   bus12: BUS := new BUS(<FCFS>, 1e100, {cpu4, cpu7}); -- Motor - Events
+  bus13: BUS := new BUS(<FCFS>, 1e100, {cpu5, cpu7}); -- Motion Sensor - Events
  
 
 

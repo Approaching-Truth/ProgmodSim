@@ -60,6 +60,9 @@ class Robot_Arm_Controller
 
             -- Get target from UI
             target := ctl_target_joint_angle;
+
+            -- Emergency break off 
+            MySystem`environment.emergency_break :=0;
             
             -- Calculate errror
             angle_error := target - ctl_joint_angle;
@@ -115,7 +118,7 @@ class Robot_Arm_Controller
             ctl_angular_velocity := 0;
 
             -- Set motor torque to 0
-            MySystem`motor.set_torque(0);
+            MySystem`environment.emergency_break := -MySystem`motor.get_torque();
         ); 
 
         private loop: () ==> ()

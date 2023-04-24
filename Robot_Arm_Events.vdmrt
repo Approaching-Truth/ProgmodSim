@@ -1,7 +1,7 @@
 class Robot_Arm_Events
 
 types
-    public Event = <NewTarget> | <MotorFailure> | <MotorRepaired> | <MechanicalFailure> | <EnvironmentalObstacleDetected> | <EnvironmentalObstacleRemoved> | <UnknownEnvironment>;
+    public Event = <NewTarget> | <MotorFailure> | <MotorRepaired> | <MechanicalFailure> | <ObstacleDetected> | <ObstacleRemoved> | <UnknownEnvironment>;
 
 instance variables
     private events : seq of (real * Event * real);
@@ -38,10 +38,10 @@ operations
                 if (e = <MotorRepaired>) then (
                     MySystem`motor.motor_repaired();
                 );
-                if (e = <EnvironmentalObstacleDetected>) then (
+                if (e = <ObstacleDetected>) then (
                     MySystem`motion_sensor.sensor_obstacle();
                 );
-                if (e = <EnvironmentalObstacleRemoved>) then (
+                if (e = <ObstacleRemoved>) then (
                     MySystem`motion_sensor.sensor_clear();
                 );
                 -- Remove event from queue

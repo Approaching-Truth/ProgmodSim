@@ -15,6 +15,8 @@ instance variables
 
     private step_cycles : int;
     private log_sample_rate : int; -- Unit: same as periodic step rate
+    public emergency_break : real;
+
     
 values
     public target_lb : real = 3.14/2 - 0.1; -- N1
@@ -42,6 +44,7 @@ operations
         state_history := [];
         last_time := 0;
         step_cycles := 0;
+        emergency_break :=0;
         
         -- Record state & simtime
         record_state();
@@ -101,7 +104,7 @@ operations
         -- New acceleration is calculated from the motor torque
         -- TO-DO: add gravity acceleration (and friction?)
         
-        env_angular_acceleration := MySystem`motor.get_torque() / moment_of_inertia_arm;
+        env_angular_acceleration := (MySystem`motor.get_torque() + emergency_break) / moment_of_inertia_arm;
 
         -- Record state
         if(step_cycles mod 10 = 0) then (

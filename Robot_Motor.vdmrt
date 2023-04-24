@@ -27,6 +27,7 @@ class Robot_Motor
         public motor_repaired: () ==> ()
         motor_repaired () == duration(0) (
             operation_status := <Working>;
+            
         );
 
         public get_operation_status: () ==> Status
