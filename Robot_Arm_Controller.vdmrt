@@ -167,7 +167,7 @@ class Robot_Arm_Controller
         )
 
         thread
-            periodic(1E9, 0, 0, 0)(loop);
+            periodic(5E9, 0, 0, 0)(loop);
 
 
 end Robot_Arm_Controller
