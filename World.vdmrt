@@ -64,8 +64,8 @@ class World
             return out_string;
         );
 
-        public scenario: () ==> bool
-        scenario() == (
+        public scenario1: () ==> bool
+        scenario1() == (
             dcl succ : bool;
             dcl str : seq of char; 
 
