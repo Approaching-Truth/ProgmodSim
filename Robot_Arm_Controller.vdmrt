@@ -40,7 +40,7 @@ class Robot_Arm_Controller
 
 
         public record_state: () ==> ()
-        record_state() == (
+        record_state() == duration(0)(
             state_history := state_history ^ [mk_(time, ctl_joint_angle, ctl_angular_velocity)]
         );
         
@@ -105,7 +105,7 @@ class Robot_Arm_Controller
         -- Applies emergency break which stops all motion!
         -- NOTE: This is a quick fix, and will be changed to later iterations!
         public emergency_break: () ==> ()
-        emergency_break() == (
+        emergency_break() == duration(0)(
             -- Set env var to 0
             MySystem`environment.env_angular_acceleration := 0;
             MySystem`environment.env_angular_velocity := 0;
@@ -164,7 +164,7 @@ class Robot_Arm_Controller
         )
 
         thread
-            periodic(5E9, 0, 0, 0)(loop);
+            periodic(1E9, 0, 0, 0)(loop);
 
 
 end Robot_Arm_Controller
