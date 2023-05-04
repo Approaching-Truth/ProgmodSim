@@ -22,7 +22,7 @@ instance variables
 
     
 values
-    private log_sample_rate : int = 40; -- Unit: same as periodic step rate
+    private log_sample_rate : int = 20; -- Unit: same as periodic step rate
 
     public target_lb : real = 3.14/2 - 0.1; -- N1
     public target_ub : real = 3.14/2; -- N2
@@ -105,8 +105,6 @@ operations
         -- Compute New Values 
         dcl delta_joint_angle : real;
         dcl delta_angular_velocity : real;
-        dcl gravity_torque : real;
-        dcl friction_torque : real;
 
         -- COMPUTATION
         last_time := t;
@@ -133,7 +131,7 @@ operations
 
         --  Now acceleration can be calculated using the torques
         env_angular_acceleration := (MySystem`motor.get_torque() - gravity_torque - friction_torque) 
-                                        -- Subtracting gravity_torque since clockwise movement is negative in our model
+                                    -- Subtracting gravity_torque since clockwise movement is negative in our model
                                     / moment_of_inertia_arm * emergency_break; -- Emergency break changed to enable/disable switch
 
         -- Record state
@@ -142,7 +140,7 @@ operations
         );
         step_cycles := step_cycles + 1;
     ) 
-    --post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
+    post env_joint_angle >= safe_lb and env_joint_angle <= safe_ub;
 
     sync
         per isFinished => (time > final_sim_time);

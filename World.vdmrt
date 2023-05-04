@@ -77,8 +77,6 @@ class World
 
             -- Add events
             MySystem`events.queueEvent(5E9, <NewTarget>, 3.1415/8);
-            
-
 
             -- Start Simulation
             start(MySystem`environment);
