@@ -5,9 +5,9 @@ class Robot_Angle_Sensor
         snr_angular_acceleration: real;
 
     values
-        sample_rate : real = 5E8;
-        cpu_data_retrieval_duration : real = 1E7;
-        physical_data_retrieval_duration : real = 1E7;
+        sample_rate : real = 1E7;
+        cpu_data_retrieval_duration : real = 1E3;
+        physical_data_retrieval_duration : real = 1E3;
         
     operations
 

@@ -1,5 +1,10 @@
 class Robot_Arm_Controller
     instance variables
+        math : MATH := new MATH ();
+
+        -- Used to inform the loop function that it can enter normal mode
+        initialization_complete: bool;
+
         public ctl_joint_angle: real;
         public ctl_target_joint_angle: real;
         public previous_angle_error: real;
@@ -11,14 +16,23 @@ class Robot_Arm_Controller
         private K_p : real;
         private K_d : real;
         public ctl_mode : <Initialisation> | <Normal> | <Emergency>;
+
+        
     
     values
         update_rate : real = 5E8;
+
+        -- NOTE: The constants could be retrieved at start up, but this would require another "sensor" of some kind.
+        --       For the moment, we assume that the controller is hard-coded for these specific values.
+        arm_cylinder_radius : real = 0.8; -- meter
+        arm_load_mass : real = 1.2; -- kg
+        gravitational_acceleration : real = 9.8159; -- m/s^2
 
     operations
         -- Constructor
         public Robot_Arm_Controller: () ==> Robot_Arm_Controller
         Robot_Arm_Controller() == (
+
             ctl_target_joint_angle := -1; -- Will be overwritten
             ctl_joint_angle := 0;
             previous_angle_error := 0;
@@ -45,13 +59,14 @@ class Robot_Arm_Controller
         );
         
         public find_target: () ==> ()
-        find_target() == duration (5E8) (
+        find_target() == duration (0E7) (
             dcl target : real;
             dcl angle_error : real;
             dcl delta_angle_error : real;
             dcl new_torque : real;
             dcl delta_t : real;
             dcl t : real;
+            dcl gravity_torque : real;
             
             -- Set timing local variabels
             t := time/1E9;
@@ -61,9 +76,6 @@ class Robot_Arm_Controller
             -- Get target from UI
             target := ctl_target_joint_angle;
 
-            -- Emergency break off 
-            MySystem`environment.emergency_break :=0;
-            
             -- Calculate errror
             angle_error := target - ctl_joint_angle;
             delta_angle_error := (angle_error - previous_angle_error) / delta_t;
@@ -78,10 +90,16 @@ class Robot_Arm_Controller
             else (
             );
             */
+
+            -- We need to calculate the gravity torque to compensate for it
+            gravity_torque := arm_load_mass * gravitational_acceleration * arm_cylinder_radius * math.cos(ctl_joint_angle);
            
-            new_torque := K_p * angle_error + K_d * delta_angle_error - 0.5 * ctl_angular_velocity;
+            new_torque := K_p * angle_error + K_d * delta_angle_error + gravity_torque;
             
             MySystem`motor.set_torque(new_torque);
+            
+            -- Emergency break off 
+            MySystem`environment.emergency_break := 1;
 
             previous_angle_error := angle_error;
             record_state();
@@ -89,7 +107,7 @@ class Robot_Arm_Controller
         
         -- Sense joint angle
         public monitor_joint_angle: () ==> ()
-        monitor_joint_angle() == duration(1E8) (
+        monitor_joint_angle() == duration(0E7) (
             dcl env_angle: real := MySystem`sensor.get_snr_joint_angle();
             dcl env_angular_velocity: real := MySystem`sensor.get_snr_angular_velocty();
             ctl_joint_angle := env_angle;
@@ -117,8 +135,9 @@ class Robot_Arm_Controller
             ctl_angular_acceleration := 0;
             ctl_angular_velocity := 0;
 
-            -- Set motor torque to 0
-            MySystem`environment.emergency_break := -MySystem`motor.get_torque();
+            -- Set torque to 0
+            --  Changed to a toggle for now since gravity torque would need to be included otherwise
+            MySystem`environment.emergency_break := 0;
         ); 
 
         private loop: () ==> ()
@@ -127,7 +146,7 @@ class Robot_Arm_Controller
             -- Get current joint angle
             monitor_joint_angle();
 
-            -- Check if target have changed
+            -- Check if target has changed
             update_target();
 
             -- Calculate new torque
@@ -140,7 +159,7 @@ class Robot_Arm_Controller
                 and MySystem`motion_sensor.get_motion_sensor_status() = <Clear>
                 ) 
             then (
-                ctl_mode := <Normal>;
+                ctl_mode := <Normal>
             ) else (
                 ctl_mode := <Emergency>;
             );
@@ -151,23 +170,23 @@ class Robot_Arm_Controller
             -- If in Initialisation, do nothing
             if (ctl_mode = <Initialisation>) then (
                 skip;
-            );
+            )
             
             -- Normal
             -- Find target 
-            if (ctl_mode = <Normal>) then (
+            else if (ctl_mode = <Normal>) then (
                 find_target();
-            );
+            )
             
             -- Emergency
             -- Stop movement
-            if (ctl_mode = <Emergency>) then (
+            else if (ctl_mode = <Emergency>) then (
                 emergency_break();
             );
         )
 
         thread
-            periodic(5E9, 0, 0, 0)(loop);
+            periodic(1E8, 0, 0, 0)(loop);
 
 
 end Robot_Arm_Controller

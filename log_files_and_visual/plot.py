@@ -33,8 +33,8 @@ def txt_to_variable_array (data, sh_index, var_index):
 
 def plotxy (x, y, xlab, ylab, xunit, yunit):
     # PLOT REFFERNCE LINE
-    ref1 = 3.14/4
-    ref2 = 3.14/8
+    ref1 = 3.14/8
+    ref2 = 3.14/4
     x_start = 0
     x_end = max(x)
     res = 100 # resolution
@@ -76,7 +76,7 @@ def main():
     matplotlib.rcParams['font.family'] = "serif" # Set default family to serif
 
     # Get data
-    f = open("log_files/scenario1_log", "r")
+    f = open("log_files/scenario2_log", "r")
     lines : str = f.read()
 
     # GET XY DATA
