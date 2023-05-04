@@ -1,4 +1,5 @@
 class World
+
     instance variables
         io : IO := new IO ();
         csv : CSV := new CSV ();
@@ -69,26 +70,21 @@ class World
             dcl succ : bool;
             dcl str : seq of char; 
 
-            MySystem`environment.setFinalSimulationTime(150E9);
+            MySystem`environment.setFinalSimulationTime(60E9);
 
-            -- Set COntroller params
-            MySystem`controller.set_controller_params(0.05, 0.08);
+            -- Set Controller params
+            MySystem`controller.set_controller_params(0.03, 0.5);
 
             -- Add events
-            --MySystem`events.queueEvent(0E9, <NewTarget>, 3.1415/4);
             MySystem`events.queueEvent(5E9, <NewTarget>, 3.1415/8);
-            MySystem`events.queueEvent(10E9, <ObstacleDetected>, -1);
-            -- MySystem`events.queueEvent(5E9, <MotorFailure>, -1);
-            MySystem`events.queueEvent(20E9, <ObstacleRemoved>, -1);
             
-             MySystem`events.queueEvent(80E9, <NewTarget>, 3.1415/4);
 
 
             -- Start Simulation
             start(MySystem`environment);
-            start(MySystem`controller);
             start(MySystem`sensor);
             start(MySystem`events);
+            start(MySystem`controller);
             
             
             MySystem`environment.isFinished();
