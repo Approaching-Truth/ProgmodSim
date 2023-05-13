@@ -1,53 +1,30 @@
 system MySystem
 
 instance variables
-
-  public static environment: Robot_Arm_Environment := new Robot_Arm_Environment();
-  public static controller: Robot_Arm_Controller := new Robot_Arm_Controller();
-  public static sensor: Robot_Angle_Sensor := new Robot_Angle_Sensor();
-  public static motion_sensor: Robot_Motion_Sensor := new Robot_Motion_Sensor();
-  public static ui: Robot_Arm_UI := new Robot_Arm_UI();
-  public static motor: Robot_Motor := new Robot_Motor();
-  public static events: Robot_Arm_Events := new Robot_Arm_Events();
-
-  cpu1: CPU := new CPU(<FCFS>, 1e9); -- Environment
-  cpu2: CPU := new CPU(<FCFS>, 1e9); -- Controller
-  cpu3: CPU := new CPU(<FCFS>, 1e9); -- Sensor
-  cpu4: CPU := new CPU(<FCFS>, 1e9); -- Motor
-  cpu5: CPU := new CPU(<FCFS>, 1e9); -- MotionSensor
-  cpu6: CPU := new CPU(<FCFS>, 1e9); -- UI
-  cpu7: CPU := new CPU(<FCFS>, 1e9); -- Events
+  --Simulation
+  public static hwi:HardwareInterface := new HardwareInterface();
+  public static motorTorqueSensor : MotorTorqueSensor;
+  public static jointAngleSensor : JointAngleSensor;
+  public static targetAngleSensor : TargetAngleSensor;
+  public static obstacleSensor : ObstacleSensor;
+  public static angularVelocitySensor : AngularVelocitySensor;
+  public static controller : [Robot_Arm_Controller] := nil;
   
-  bus1: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu3}); -- Env - Angle Sensor
-  bus2: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu4}); -- Env - Motor
-  bus3: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu5}); -- Env - Motion Sensor
-  bus4: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu6}); -- Env - UI
-  bus5: BUS := new BUS(<FCFS>, 1e100, {cpu1, cpu7}); -- Env - Events
-  
-  
-  bus6: BUS := new BUS(<FCFS>, 1e100, {cpu3, cpu2}); -- Controller - Angle sensor 
-  bus7: BUS := new BUS(<FCFS>, 1e100, {cpu4, cpu2}); -- Controller - Motor
-  bus8: BUS := new BUS(<FCFS>, 1e100, {cpu5, cpu2}); -- Controller - Motion sensor
-  bus9: BUS := new BUS(<FCFS>, 1e100, {cpu6, cpu2}); -- Controller - UI
-  bus10: BUS := new BUS(<FCFS>, 1e100, {cpu2, cpu7}); -- Controller - Events
+  cpu1 : CPU := new CPU(<FP>,20);
 
-  bus11: BUS := new BUS(<FCFS>, 1e100, {cpu6, cpu7}); -- Controller - Events
-  bus12: BUS := new BUS(<FCFS>, 1e100, {cpu4, cpu7}); -- Motor - Events
-  bus13: BUS := new BUS(<FCFS>, 1e100, {cpu5, cpu7}); -- Motion Sensor - Events
- 
+  
 
 
 operations
 
   public MySystem: () ==> MySystem
   MySystem() == (
-    cpu1.deploy(environment);
-    cpu2.deploy(controller);
-    cpu3.deploy(sensor);
-    cpu4.deploy(motor);
-    cpu5.deploy(motion_sensor);
-    cpu6.deploy(ui);
-    cpu7.deploy(events)
+    motorTorqueSensor := new MotorTorqueSensor(hwi.motorTorque);
+    jointAngleSensor := new JointAngleSensor(hwi.jointAngle);
+    targetAngleSensor := new TargetAngleSensor(hwi.targetAngle);
+    obstacleSensor := new ObstacleSensor(hwi.obstacleSensor);
+    angularVelocitySensor := new AngularVelocitySensor(hwi.angularVelocity);
+    cpu1.deploy(controller,"Robot_Arm_Controller")
   );
 
 end MySystem

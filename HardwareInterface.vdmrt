@@ -1,0 +1,29 @@
+class HardwareInterface
+values
+    --@ interface: type = parameter, name="safe_lb"
+    public safe_lb : RealPort = new RealPort(0.0);
+    --@ interface: type = parameter, name="safe_ub"
+    public safe_ub : RealPort = new RealPort(3.14/2);
+    --@ interface: type = parameter, name="target_lb"
+    public target_lb : RealPort = new RealPort(3.14/2 - 0.1); -- N1
+    --@ interface: type = parameter, name="target_ub"
+    public target_ub : RealPort = new RealPort(3.14/2); -- N2
+    
+
+
+instance variables
+    --@ interface: type = output, name="motorTorque"
+    public motorTorque : RealPort := new RealPort(0.0);
+    --@ interface: type = input, name="jointAngle"
+    public jointAngle : RealPort := new RealPort(0.0);
+    --@ interface: type = input, name="jointAngle"
+    public obstacleSensor : StringPort := new StringPort("Clear");
+    --@ interface: type = input, name="targetAngle"
+    public targetAngle : RealPort := new RealPort(0.0);
+    --@ interface: type = input, name="targetAngle"
+    public angularVelocity : RealPort := new RealPort(0.0);
+
+
+
+end HardwareInterface
+

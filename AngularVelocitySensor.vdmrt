@@ -1,0 +1,14 @@
+class AngularVelocitySensor
+
+instance variables
+    port : RealPort;
+
+
+operations
+    public AngularVelocitySensor : RealPort ==> AngularVelocitySensor
+    AngularVelocitySensor(p) == port := p;
+
+    public getAngularVelocity: () ==> real
+    getAngularVelocity() == return port.getValue();
+
+end AngularVelocitySensor

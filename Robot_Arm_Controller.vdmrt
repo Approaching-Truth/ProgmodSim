@@ -16,7 +16,8 @@ class Robot_Arm_Controller
         private K_p : real;
         private K_d : real;
         public ctl_mode : <Initialisation> | <Normal> | <Emergency>;
-
+        -- Cosimulation
+        public controllerActive : BoolPort := new BoolPort(true);
         
     
     values
@@ -96,11 +97,9 @@ class Robot_Arm_Controller
            
             new_torque := K_p * angle_error + K_d * delta_angle_error + gravity_torque;
             
-            MySystem`motor.set_torque(new_torque);
+            MySystem`motorTorqueSensor.setMotorTorque(new_torque);
             
-            -- Emergency break off 
-            MySystem`environment.emergency_break := 1;
-
+          
             previous_angle_error := angle_error;
             record_state();
         );
@@ -108,8 +107,8 @@ class Robot_Arm_Controller
         -- Sense joint angle
         public monitor_joint_angle: () ==> ()
         monitor_joint_angle() == duration(0E7) (
-            dcl env_angle: real := MySystem`sensor.get_snr_joint_angle();
-            dcl env_angular_velocity: real := MySystem`sensor.get_snr_angular_velocty();
+            dcl env_angle: real := MySystem`jointAngleSensor.getAngle();
+            dcl env_angular_velocity: real := MySystem`angularVelocitySensor.getAngularVelocity();
             ctl_joint_angle := env_angle;
             ctl_angular_velocity := env_angular_velocity;
             record_state();
@@ -118,8 +117,8 @@ class Robot_Arm_Controller
         -- Update target
         public update_target: () ==> ()
         update_target () == duration(0)(
-            if not (MySystem`ui.get_target_joint_angle() = ctl_target_joint_angle) then (
-                ctl_target_joint_angle := MySystem`ui.get_target_joint_angle()
+            if not (MySystem`targetAngleSensor.getAngle() = ctl_target_joint_angle) then (
+                ctl_target_joint_angle := MySystem`targetAngleSensor.getAngle()
             );
         );
 
@@ -128,8 +127,7 @@ class Robot_Arm_Controller
         public emergency_break: () ==> ()
         emergency_break() == duration(0)(
             -- Set env var to 0
-            MySystem`environment.env_angular_acceleration := 0;
-            MySystem`environment.env_angular_velocity := 0;
+            
 
             -- Set ctl var to 0
             ctl_angular_acceleration := 0;
@@ -137,7 +135,6 @@ class Robot_Arm_Controller
 
             -- Set torque to 0
             --  Changed to a toggle for now since gravity torque would need to be included otherwise
-            MySystem`environment.emergency_break := 0;
         ); 
 
         private loop: () ==> ()
@@ -153,7 +150,7 @@ class Robot_Arm_Controller
             find_target();
 
             -- Check and switch mode
-            if (    ctl_joint_angle >= MySystem`environment.safe_lb 
+            if (    ctl_joint_angle >= MySystem`hwi.safe_lb
                 and ctl_joint_angle <= MySystem`environment.safe_ub 
                 and MySystem`motor.get_operation_status() = <Working>
                 and MySystem`motion_sensor.get_motion_sensor_status() = <Clear>

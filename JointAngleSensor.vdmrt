@@ -1,0 +1,14 @@
+class JointAngleSensor
+
+instance variables
+    port : RealPort;
+
+
+operations
+    public JointAngleSensor : RealPort ==> JointAngleSensor
+    JointAngleSensor(p) == port := p;
+
+    public getAngle: () ==> real
+    getAngle() == return port.getValue();
+
+end JointAngleSensor

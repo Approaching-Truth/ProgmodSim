@@ -1,0 +1,14 @@
+class MotorTorqueSensor
+
+instance variables
+    port : RealPort;
+
+
+operations
+    public MotorTorqueSensor : RealPort ==> MotorTorqueSensor
+    MotorTorqueSensor(p) == port := p;
+
+    public setMotorTorque: real ==> ()
+    setMotorTorque(torque) == port.setValue(torque);
+
+end MotorTorqueSensor

@@ -1,136 +1,16 @@
 class World
 
-    instance variables
-        io : IO := new IO ();
-        csv : CSV := new CSV ();
+operations
+    public run : () ==> ()
+    run() == (
+        start(MySystem`controller);
+        block();
+    );
 
-    operations
+    private block : () ==> ()
+    block() == skip;
+    
 
-        -- Format data history
-        -- State histories are seperated by |
-        -- Variables partionens by /
-        -- Individual variabels by &
-        public format_data_out: seq of (real * real * real) * seq of (real * real * real) ==> seq of char
-        format_data_out(sh1, sh2) == (
-            -- String to be manipulated
-            dcl out_string : seq of char := "";
-            
-            -- STATE HISTORY 1
-            -- First att
-            for tup in sh1 do (
-                dcl val: real := tup.#1;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
-            );
-
-            out_string := out_string ^ "/";
-
-            -- Second att
-            for tup in sh1 do (
-                dcl val : real := tup.#2;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
-            );
-
-            out_string := out_string ^ "/";
-
-            -- Third att
-            for tup in sh1 do (
-                dcl val : real := tup.#3;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
-            );
-
-            out_string := out_string ^ "|";
-
-            -- STATE HISTORY 2
-            -- First att
-            for tup in sh2 do (
-                dcl val: real := tup.#1;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
-            );
-            out_string := out_string ^ "/";
-
-            -- Second att
-            for tup in sh2 do (
-                dcl val : real := tup.#2;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
-            );
-            out_string := out_string ^ "/";
-
-            -- Third att
-            for tup in sh2 do (
-                dcl val : real := tup.#3;
-                out_string := out_string ^ VDMUtil`val2seq_of_char[real](val) ^ "&";
-            );
-            out_string := out_string ^ "/";
-
-            return out_string;
-        );
-
-        public scenario1: () ==> bool
-        scenario1() == (
-            dcl succ : bool;
-            dcl str : seq of char; 
-
-            MySystem`environment.setFinalSimulationTime(60E9);
-
-            -- Set Controller params
-            MySystem`controller.set_controller_params(0.03, 0.5);
-
-            -- Add events
-            MySystem`events.queueEvent(5E9, <NewTarget>, 3.1415/8);
-
-            -- Start Simulation
-            start(MySystem`environment);
-            start(MySystem`sensor);
-            start(MySystem`events);
-            start(MySystem`controller);
-            
-            
-            MySystem`environment.isFinished();
-
-            -- Log results
-            str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\scenario1_log", str, <start>);
-            
-            return true;
-        );
-
-       public scenario2: () ==> bool
-        scenario2() == (
-            dcl succ : bool;
-            dcl str : seq of char; 
-
-            MySystem`environment.setFinalSimulationTime(150E9);
-
-            -- Set COntroller params
-            MySystem`controller.set_controller_params(0.05, 0.08);
-
-            -- Add events
-            --MySystem`events.queueEvent(0E9, <NewTarget>, 3.1415/4);
-            MySystem`events.queueEvent(5E9, <NewTarget>, 3.1415/8);
-            MySystem`events.queueEvent(10E9, <MotorFailure>, -1);
-            -- MySystem`events.queueEvent(5E9, <MotorFailure>, -1);
-            MySystem`events.queueEvent(20E9, <MotorRepaired>, -1);
-            
-             MySystem`events.queueEvent(80E9, <NewTarget>, 3.1415/4);
-
-
-            -- Start Simulation
-            start(MySystem`environment);
-            start(MySystem`controller);
-            start(MySystem`sensor);
-            start(MySystem`events);
-            
-            
-            MySystem`environment.isFinished();
-
-            -- Log results
-            str := format_data_out(MySystem`environment.state_history, MySystem`environment.state_history);
-            succ := io.fecho("log_files_and_visual\\log_files\\scenario2_log", str, <start>);
-            
-            return true;
-        );
-
-
-
-
+sync
+    per block => false;
 end World

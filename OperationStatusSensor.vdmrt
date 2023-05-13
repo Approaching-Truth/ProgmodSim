@@ -1,0 +1,14 @@
+class OperationStatusSensor
+
+instance variables
+    port : StringPort;
+
+
+operations
+    public OperationStatusSensor : StringPort ==> OperationStatusSensor
+    OperationStatusSensor(p) == port := p;
+
+    public getStatus: () ==> seq of char
+    getStatus() == return port.getValue();
+
+end OperationStatusSensor

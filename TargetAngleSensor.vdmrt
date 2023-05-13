@@ -1,0 +1,14 @@
+class TargetAngleSensor
+
+instance variables
+    port : RealPort;
+
+
+operations
+    public TargetAngleSensor : RealPort ==> TargetAngleSensor
+    TargetAngleSensor(p) == port := p;
+
+    public getAngle: () ==> real
+    getAngle() == return port.getValue();
+
+end TargetAngleSensor

@@ -1,0 +1,14 @@
+class ObstacleSensor
+
+instance variables
+    port : StringPort;
+
+
+operations
+    public ObstacleSensor : StringPort ==> ObstacleSensor
+    ObstacleSensor(p) == port := p;
+
+    public getObstacle: () ==> seq of char
+    getObstacle() == return port.getValue();
+
+end ObstacleSensor
